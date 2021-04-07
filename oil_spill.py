@@ -2,10 +2,15 @@
 # Hugh Smith
 '''
 the main file for the game
+
+the game shall be about an oil spill and you have to go around
+and clean up as much oil in the form of killing monsters and other means
 '''
 # imports
+# the map genaration
 import genarate_map
-
+# the pathfinding for the enimys
+import a_star
 
 # varibles 
 
@@ -44,3 +49,9 @@ class player(alive):
 # functions
 
 # main routine
+
+# playing game
+playing = True
+while playing:
+    # play game
+    pass
