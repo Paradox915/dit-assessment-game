@@ -1,7 +1,7 @@
   # testing perlin noise V2
 # Hugh Smith
 '''
-testing the use of perlin noise in train gen
+testing the use of perlin noise in train genaration
 '''
 
 # imports 
