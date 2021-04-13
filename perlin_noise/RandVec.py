@@ -60,5 +60,5 @@ class RandVec:
         try:
             assert val >= 0 and val <= 1
         except AssertionError:
-            raise ValueError(f'expected to have value in range [0, 1] but you passed {val}')
+            raise ValueError('expected to have value in range [0, 1] but you passed {val}')
         return 6*math.pow(val, 5)-15*math.pow(val,4)+10*math.pow(val,3)

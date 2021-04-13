@@ -15,32 +15,50 @@ import a_star
 # varibles 
 
 # classes
-class alive:
+class Alive:
     '''
     the class of the player and enimys
     '''
-    def __init__(self, position, syimble, health_max, health):
+    def __init__(self, position, symbol, health_max, health):
         self.position = position
-        self.syimble = syimble
+        self.symbol = symbol
         self.health_max = health_max
         self.health = health
-
-    # move the player
+    
+    # check if the object is alive
+    def is_alive(self):
+        '''
+        @param : 
+        @returns : bool
+        @throws : 
+        '''
+        if self.health <= 0:
+            return False
+        else:
+            return True
+    
+    # move the object
     def move(self,direction):
         '''
-        @param : turple
+        @param : (int, int)
         @returns : none
         @throws : 
         '''
         pass
 
-class enimy(alive):
+class Enemy(alive):
     '''
     enimys
     '''
-    pass
+    def get_path():
+        '''
+        @param : (int, int), (int, int) 
+        @returns : list
+        @throws : no possible path
+        '''        
+        pass
 
-class player(alive):
+class Player(alive):
     '''
     the player class
     '''

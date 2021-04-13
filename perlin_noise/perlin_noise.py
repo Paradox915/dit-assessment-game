@@ -19,13 +19,13 @@ class PerlinNoise:
         try:
             assert octaves > 0
         except AssertionError:
-            raise ValueError(f'octaves expected to be positive number, but you passed: {octaves}')
+            raise ValueError('octaves expected to be positive number, but you passed: {octaves}')
 
         try:
             if not seed is None:
                 assert type(seed) == int and seed > 0
         except AssertionError:
-            raise ValueError(f'seed expected to be positive integer number, but you passed: {seed}')
+            raise ValueError('seed expected to be positive integer number, but you passed: {seed}')
 
         self.octaves = octaves
         if seed:
@@ -58,7 +58,7 @@ class PerlinNoise:
             return
         else:
             if not self._is_iterable(coordinates):
-                raise TypeError(f'''
+                raise TypeError('''
                                 coordinates must be iterable (np.array, list, map ..)
                                 but you passed not iterable coordinates of type {type(coordinates)}''')
 
@@ -90,7 +90,7 @@ class PerlinNoise:
         try:
             coor_bounding_box = [(math.floor(c), math.floor(c+1)) for c in coordinates]
         except TypeError:
-            raise TypeError(f'''could execute math.floor to passed coordinated,
+            raise TypeError('''could execute math.floor to passed coordinated,
                                 expected int or float, reveived {type(coordinates[0])}''')
 
         val = 0
