@@ -47,7 +47,9 @@ class Alive:
         @returns : none
         @throws : 
         '''
-        pass
+        print(direction)
+        self.position = (self.position[0]+direction[0],self.position[1]+direction[1])
+
 
 class Enemy(Alive):
     '''
@@ -75,10 +77,25 @@ player = Player((0,0),"&",100,100)
 
 # create the map
 _map = genarate_map.get_map()
+_map_store = list(_map)
 
+_map[player.position[1]][player.position[0]] = player.symbol
 # playing game
 playing = True
 while playing:
     # play game
     # get user input
-    pass
+    print("map")
+    for row in _map:
+        print(*row)
+    print("store")
+    for row in _map_store:
+        print(*row)
+    #print(player.position)
+    old_char =  _map_store[player.position[1]][player.position[0]]
+    _map[player.position[1]][player.position[0]] = old_char
+    print(player.position)
+    player.move(user_input.movement_input())
+    print(player.position)
+    _map[player.position[1]][player.position[0]] = player.symbol
+    

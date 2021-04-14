@@ -5,10 +5,10 @@ file for handling user input
 '''
 # functions
 # get movement input
-def movement_input(keys = ["w","s","a","d"], text = " "):
+def movement_input(keys = ["w","s","a","d"], text = ""):
     '''
     @param : [string]
-    @returns : string
+    @returns : (int,int)
     @throws : 
     '''
     # loop untill a valid input is gotten
@@ -24,13 +24,13 @@ def movement_input(keys = ["w","s","a","d"], text = " "):
     user_index = keys.index(user_input)
     # return a direction based of the index of the input
     if user_index == 0:
-        return "up"
+        return (0,-1)
     elif user_index == 1:
-        return "down"
+        return (0,1)
     elif user_index == 2:
-        return "left"
+        return (-1,0)
     else:
-        return "right"
+        return (1,0)
 
 
 # function to get input of specifyed type

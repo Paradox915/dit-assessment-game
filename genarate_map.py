@@ -10,7 +10,7 @@ from perlin_noise import PerlinNoise
 
 
 # varibles
-def get_map(_max = 0.001, map_x = 100, map_y = 100):
+def get_map(_max = 0.001, map_x = 10, map_y = 10):
 
     noise1 = PerlinNoise(octaves=3)
     noise2 = PerlinNoise(octaves=6)
