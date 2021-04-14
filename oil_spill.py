@@ -12,6 +12,9 @@ import genarate_map
 # the pathfinding for the enimys
 import a_star
 
+# handle user input
+import user_input
+
 # varibles 
 
 # classes
@@ -46,11 +49,11 @@ class Alive:
         '''
         pass
 
-class Enemy(alive):
+class Enemy(Alive):
     '''
     enimys
     '''
-    def get_path():
+    def get_path(self):
         '''
         @param : (int, int), (int, int) 
         @returns : list
@@ -58,7 +61,7 @@ class Enemy(alive):
         '''        
         pass
 
-class Player(alive):
+class Player(Alive):
     '''
     the player class
     '''
@@ -67,9 +70,15 @@ class Player(alive):
 # functions
 
 # main routine
+# create the player
+player = Player((0,0),"&",100,100)
+
+# create the map
+_map = genarate_map.get_map()
 
 # playing game
 playing = True
 while playing:
     # play game
+    # get user input
     pass
