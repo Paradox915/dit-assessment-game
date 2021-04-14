@@ -16,7 +16,8 @@ import a_star
 import user_input
 
 # varibles 
-
+_map_store = []
+_map = []
 # classes
 class Alive:
     '''
@@ -77,7 +78,8 @@ player = Player((0,0),"&",100,100)
 
 # create the map
 _map = genarate_map.get_map()
-_map_store = list(_map)
+
+_map_store = _map.copy()
 
 _map[player.position[1]][player.position[0]] = player.symbol
 # playing game
