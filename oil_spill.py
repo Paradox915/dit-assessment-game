@@ -16,8 +16,11 @@ import a_star
 import user_input
 
 # varibles 
-_map_store = []
-_map = []
+game_map = []
+
+x_size = 20
+y_size = 20
+
 # classes
 class Alive:
     '''
@@ -41,15 +44,25 @@ class Alive:
         else:
             return True
     
+    # return the stats
+    def get_stats(self):
+        '''
+        @param : 
+        @returns :
+        @throws :
+        '''
+        pass
+
     # move the object
-    def move(self,direction):
+    def move(self,direction, x_max, y_max):
         '''
         @param : (int, int)
         @returns : none
-        @throws : 
+        @throws : TypeError
         '''
-        print(direction)
-        self.position = (self.position[0]+direction[0],self.position[1]+direction[1])
+        # make sure that the player is inside of the boundary
+        if self.position[0]+direction[0] < y_max and self.position[1]+direction[1] < x_max and self.position[0]+direction[0] >= 0 and self.position[1]+direction[1] >= 0:
+            self.position = (self.position[0]+direction[0],self.position[1]+direction[1])
 
 
 class Enemy(Alive):
@@ -68,7 +81,14 @@ class Player(Alive):
     '''
     the player class
     '''
-    pass
+    # get the players inventory
+    def get_inventory(self):
+        '''
+        @param : 
+        @returns :
+        @throws :
+        '''
+        pass
 
 # functions
 
@@ -77,27 +97,21 @@ class Player(Alive):
 player = Player((0,0),"&",100,100)
 
 # create the map
-_map = genarate_map.get_map()
+game_map = genarate_map.get_map(0.01,x_size,y_size)
 
-_map_store = _map.copy()
+store = game_map[player.position[1]][player.position[0]]
 
-_map[player.position[1]][player.position[0]] = player.symbol
+game_map[player.position[1]][player.position[0]] = player.symbol
 # playing game
 playing = True
 while playing:
     # play game
     # get user input
-    print("map")
-    for row in _map:
+    # print the map
+    for row in game_map:
         print(*row)
-    print("store")
-    for row in _map_store:
-        print(*row)
-    #print(player.position)
-    old_char =  _map_store[player.position[1]][player.position[0]]
-    _map[player.position[1]][player.position[0]] = old_char
-    print(player.position)
-    player.move(user_input.movement_input())
-    print(player.position)
-    _map[player.position[1]][player.position[0]] = player.symbol
+    game_map[player.position[1]][player.position[0]] = store
+    player.move(user_input.movement_input(),x_size,y_size)
+    store = game_map[player.position[1]][player.position[0]]
+    game_map[player.position[1]][player.position[0]] = player.symbol
     
