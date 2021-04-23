@@ -5,32 +5,30 @@ file for handling user input
 '''
 # functions
 # get movement input
-def movement_input(keys = ["w","s","a","d"], text = ""):
+def movement_input(user_input , keys = ["w","s","a","d"]):
     '''
     @param : [string]
     @returns : (int,int)
     @throws : 
     '''
     # loop untill a valid input is gotten
-    getting_input = True
-    while getting_input:
-        # get the input
-        user_input = input(text).lower()
-        # check if input is valid
-        if user_input in keys:
-            # if so then exit the while loop
-            getting_input = False
-    # get the index of the input
-    user_index = keys.index(user_input)
-    # return a direction based of the index of the input
-    if user_index == 0:
-        return (0,-1)
-    elif user_index == 1:
-        return (0,1)
-    elif user_index == 2:
-        return (-1,0)
-    else:
-        return (1,0)
+    # getting_input = True
+    # while getting_input:
+    #     # get the input
+    #     user_input = input(text).lower()
+    #     # check if input is valid
+    if user_input in keys:
+        # get the index of the input
+        user_index = keys.index(user_input)
+        # return a direction based of the index of the input
+        if user_index == 0:
+            return (0,-1)
+        elif user_index == 1:
+            return (0,1)
+        elif user_index == 2:
+            return (-1,0)
+        else:
+            return (1,0)
 
 
 # function to get input of specifyed type
@@ -55,5 +53,5 @@ def get_input(check_type = int, question = "? ", wrong_type = "wrong type"):
 # main routine
 # testing
 if __name__ == "__main__":
-    print(movement_input())
+    print(movement_input("d"))
     print(get_input())

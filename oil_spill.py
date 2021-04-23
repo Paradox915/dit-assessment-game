@@ -15,12 +15,16 @@ import a_star
 # handle user input
 import user_input
 
+# the gui
+from tkinter import * 
+
 # varibles 
 game_map = []
 
 x_size = 20
 y_size = 20
 
+store = ""
 # classes
 class Alive:
     '''
@@ -78,6 +82,11 @@ class Enemy(Alive):
         pass
 
 class Player(Alive):
+    def __init__(self, position, symbol, health_max, health, stamana, max_stamana):
+        super().__init__(position, symbol, health_max, health)
+        self.stamana = stamana
+        self.health_max = max_stamana
+
     '''
     the player class
     '''
@@ -90,11 +99,48 @@ class Player(Alive):
         '''
         pass
 
+# create tkinter window 
+root = Tk() 
+root.title('dit game') 
+
+window = Label(root, font = ('Cascadia Mono', 30, 'bold'), 
+            background = 'light blue', 
+            foreground = 'green',) 
+
+
 # functions
+# pick up keybord imput
+def Key_pressed(event):
+    '''
+    @parm : none
+    @retruns : none
+    @throws : none
+    '''
+    print(event.char)
+    player.move(user_input.movement_input(event.char),x_size,y_size)
+    update_map()
+
+
+
+
+# update the map
+def update_map():
+    global store, game_map,player
+    game_map[player.position[1]][player.position[0]] = store
+    store = game_map[player.position[1]][player.position[0]]
+    game_map[player.position[1]][player.position[0]] = player.symbol
+    text = ""
+    for row in game_map:
+        for item in row:
+            text += str(item)
+        text += "\n"
+    window.config(text = text)
 
 # main routine
+
 # create the player
-player = Player((0,0),"&",100,100)
+
+player = Player((0,0),"&",100,100,100,100)
 
 # create the map
 game_map = genarate_map.get_map(0.01,x_size,y_size)
@@ -102,16 +148,13 @@ game_map = genarate_map.get_map(0.01,x_size,y_size)
 store = game_map[player.position[1]][player.position[0]]
 
 game_map[player.position[1]][player.position[0]] = player.symbol
-# playing game
-playing = True
-while playing:
-    # play game
-    # get user input
-    # print the map
-    for row in game_map:
-        print(*row)
-    game_map[player.position[1]][player.position[0]] = store
-    player.move(user_input.movement_input(),x_size,y_size)
-    store = game_map[player.position[1]][player.position[0]]
-    game_map[player.position[1]][player.position[0]] = player.symbol
+
+window.place(in_=root, anchor="c", relx=.5, rely=.5)
+root.configure(bg='light blue')
+root.geometry("1920x1080") 
+
+# bind the action of pressing a key to the keypressed function
+root.bind("<KeyRelease>",Key_pressed)  
+
+mainloop() 
     
