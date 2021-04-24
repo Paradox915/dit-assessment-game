@@ -21,8 +21,9 @@ from tkinter import *
 # varibles 
 game_map = []
 
-x_size = 20
-y_size = 20
+# the x and y size of the map
+x_size = 24
+y_size = 80
 
 store = ""
 # classes
@@ -39,9 +40,9 @@ class Alive:
     # check if the object is alive
     def is_alive(self):
         '''
-        @param : 
+        @param : none
         @returns : bool
-        @throws : 
+        @throws : none
         '''
         if self.health <= 0:
             return False
@@ -73,6 +74,7 @@ class Enemy(Alive):
     '''
     enimys
     '''
+    # return the path for the enemy
     def get_path(self):
         '''
         @param : (int, int), (int, int) 
@@ -82,14 +84,14 @@ class Enemy(Alive):
         pass
 
 class Player(Alive):
+    '''
+    the player class
+    '''
     def __init__(self, position, symbol, health_max, health, stamana, max_stamana):
         super().__init__(position, symbol, health_max, health)
         self.stamana = stamana
         self.health_max = max_stamana
 
-    '''
-    the player class
-    '''
     # get the players inventory
     def get_inventory(self):
         '''
@@ -99,62 +101,91 @@ class Player(Alive):
         '''
         pass
 
-# create tkinter window 
+# create tkinter game_text_box 
 root = Tk() 
-root.title('dit game') 
+root.title('oil spill') 
 
-window = Label(root, font = ('Cascadia Mono', 30, 'bold'), 
-            background = 'light blue', 
-            foreground = 'green',) 
+# initalise the main text box for the game screen
+game_text_box = Text(root, font = ('Cascadia Mono', 20, 'bold'), bg = "light blue", fg = "green", state = "disabled") 
 
 
 # functions
-# pick up keybord imput
+# pick up keybord input
 def Key_pressed(event):
     '''
     @parm : none
     @retruns : none
     @throws : none
     '''
-    print(event.char)
-    player.move(user_input.movement_input(event.char),x_size,y_size)
-    update_map()
+    # update the map
+    update_map(event.char)
 
 
 
 
 # update the map
-def update_map():
+def update_map(char):
+    '''
+    @param : str
+    @returns : none
+    @throws : valueError
+    '''
     global store, game_map,player
+    # enable the text box to edit
+    game_text_box.config(state = "normal")
+    # clear the text box
+    game_text_box.delete("1.0",END)
+
+    # set the current players position to the stored char that was there
     game_map[player.position[1]][player.position[0]] = store
+    # move the player
+    player.move(user_input.movement_input(char),x_size,y_size)
+    # get a new store value
     store = game_map[player.position[1]][player.position[0]]
+    # place the player on the map
     game_map[player.position[1]][player.position[0]] = player.symbol
+
+    # draw the map to the screen
     text = ""
     for row in game_map:
         for item in row:
             text += str(item)
         text += "\n"
-    window.config(text = text)
+    game_text_box.insert(END,text)
+    # make the player a diffrent colour
+    game_text_box.tag_add("player", "%d.%d"%(player.position[1]+1,player.position[0]))
+    game_text_box.tag_config("player", foreground="grey")
+
+    # disable editing of the text box
+    game_text_box.config(state = "disabled")
+    game_text_box.pack()
+
+
 
 # main routine
 
 # create the player
-
-player = Player((0,0),"&",100,100,100,100)
+player = Player((0,0),"X",100,100,100,100)
 
 # create the map
 game_map = genarate_map.get_map(0.01,x_size,y_size)
 
+# set a starting store value
 store = game_map[player.position[1]][player.position[0]]
 
+# place the player on to the map
 game_map[player.position[1]][player.position[0]] = player.symbol
 
-window.place(in_=root, anchor="c", relx=.5, rely=.5)
+# set up the gui
+game_text_box.place(in_=root, anchor="c", relx=.5, rely=.5)
 root.configure(bg='light blue')
 root.geometry("1920x1080") 
 
 # bind the action of pressing a key to the keypressed function
 root.bind("<KeyRelease>",Key_pressed)  
 
+# show the map
+update_map(" ")
+# start the main routine
 mainloop() 
     

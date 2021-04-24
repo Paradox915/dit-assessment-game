@@ -7,7 +7,7 @@ file for handling user input
 # get movement input
 def movement_input(user_input , keys = ["w","s","a","d"]):
     '''
-    @param : [string]
+    @param : string
     @returns : (int,int)
     @throws : 
     '''
@@ -29,6 +29,7 @@ def movement_input(user_input , keys = ["w","s","a","d"]):
             return (-1,0)
         else:
             return (1,0)
+    return (0,0)
 
 
 # function to get input of specifyed type
