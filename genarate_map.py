@@ -17,7 +17,7 @@ def get_map(_max = 0.001, map_x = 10, map_y = 10):
     noise3 = PerlinNoise(octaves=12)
 
     _map = []
-
+    land_pos = []
     # main routine
     for x in range(map_x):
         row = []
@@ -34,9 +34,10 @@ def get_map(_max = 0.001, map_x = 10, map_y = 10):
             #print(_map[x][y])
             if _map[x][y] > _max:
                 _map[x][y] = "#"
+                land_pos.append((y,x))
             else:
                 _map[x][y] = " "
-    return _map
+    return _map, land_pos
 
 if __name__ == "__main__":
     for row in get_map():

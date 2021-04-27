@@ -9,6 +9,7 @@ and clean up as much oil in the form of killing monsters and other means
 # imports
 # the map genaration
 import genarate_map
+
 # the pathfinding for the enimys
 import a_star
 
@@ -18,8 +19,11 @@ import user_input
 # the gui
 from tkinter import * 
 
+#randomness
+import random
 # varibles 
 game_map = []
+enemys = []
 
 # the x and y size of the map
 x_size = 24
@@ -110,6 +114,34 @@ game_text_box = Text(root, font = ('Cascadia Mono', 20, 'bold'), bg = "light blu
 
 
 # functions
+
+# genarate a level
+def genarate_level(difficalty):
+    '''
+    @param : float
+    @returns : none
+    @throws : valueError
+    '''
+    global game_map, enemys, store
+    # create the map and the land places
+    game_map, land_pos = genarate_map.get_map(0.01,x_size,y_size)
+
+    #set the player position
+    player.position = random.choice(land_pos)
+
+    # set a starting store value
+    store = game_map[player.position[1]][player.position[0]]
+
+    # place the player on to the map
+    game_map[player.position[1]][player.position[0]] = player.symbol
+
+    # generate the enemys and place them on to the map
+    enemys = []
+    for i in range(int(difficalty)):
+        enemys.append(Enemy(random.choice(land_pos),"X",10,10))
+        game_map[enemys[i].position[1]][enemys[i].position[0]] = enemys[i].symbol
+    
+
 # pick up keybord input
 def Key_pressed(event):
     '''
@@ -130,7 +162,7 @@ def update_map(char):
     @returns : none
     @throws : valueError
     '''
-    global store, game_map,player
+    global store, game_map, player, enemys
     # enable the text box to edit
     game_text_box.config(state = "normal")
     # clear the text box
@@ -154,8 +186,12 @@ def update_map(char):
     game_text_box.insert(END,text)
     # make the player a diffrent colour
     game_text_box.tag_add("player", "%d.%d"%(player.position[1]+1,player.position[0]))
-    game_text_box.tag_config("player", foreground="grey")
+    game_text_box.tag_config("player", foreground="black")
 
+    # make the enimys a diffrent colour
+    for enemy in enemys:
+        game_text_box.tag_add("enemy", "%d.%d"%(enemy.position[1]+1,enemy.position[0]))
+        game_text_box.tag_config("enemy", foreground="dark red")
     # disable editing of the text box
     game_text_box.config(state = "disabled")
     game_text_box.pack()
@@ -165,16 +201,21 @@ def update_map(char):
 # main routine
 
 # create the player
-player = Player((0,0),"X",100,100,100,100)
+player = Player((0,0),"&",100,100,100,100)
 
-# create the map
-game_map = genarate_map.get_map(0.01,x_size,y_size)
+# create the map and the land places
+game_map, land_pos = genarate_map.get_map(0.01,x_size,y_size)
 
-# set a starting store value
-store = game_map[player.position[1]][player.position[0]]
+# #set the player position
+# player.position = random.choice(land_pos)
 
-# place the player on to the map
-game_map[player.position[1]][player.position[0]] = player.symbol
+
+# # set a starting store value
+# store = game_map[player.position[1]][player.position[0]]
+
+# # place the player on to the map
+# game_map[player.position[1]][player.position[0]] = player.symbol
+genarate_level(100)
 
 # set up the gui
 game_text_box.place(in_=root, anchor="c", relx=.5, rely=.5)
