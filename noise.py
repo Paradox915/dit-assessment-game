@@ -7,6 +7,7 @@ file for handling noise generation
 # imports
 import random
 
+
 # varibles 
 
 
@@ -40,4 +41,8 @@ def get_noise1d(_min, _max, step, ajusted_strgenth):
 
 # main routine
 if __name__ == "__main__":
-    print(get_noise1d(0,3,1,4))
+    import matplotlib.pyplot as plt
+    numbers = get_noise1d(0,1000000,1,5)
+
+    plt.plot(numbers)
+    plt.show()
