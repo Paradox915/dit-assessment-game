@@ -26,8 +26,8 @@ game_map = []
 enemys = []
 
 # the x and y size of the map
-x_size = 24
-y_size = 80
+x_size = 24 # 24
+y_size = 80 # 80
 
 store = ""
 # classes
@@ -110,7 +110,7 @@ root = Tk()
 root.title('oil spill') 
 
 # initalise the main text box for the game screen
-game_text_box = Text(root, font = ('Cascadia Mono', 20, 'bold'), bg = "light blue", fg = "green", state = "disabled") 
+game_text_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "green", state = "disabled") 
 
 
 # functions
@@ -215,7 +215,7 @@ game_map, land_pos = genarate_map.get_map(0.01,x_size,y_size)
 
 # # place the player on to the map
 # game_map[player.position[1]][player.position[0]] = player.symbol
-genarate_level(100)
+genarate_level(10)
 
 # set up the gui
 game_text_box.place(in_=root, anchor="c", relx=.5, rely=.5)
@@ -228,5 +228,4 @@ root.bind("<KeyRelease>",Key_pressed)
 # show the map
 update_map(" ")
 # start the main routine
-mainloop() 
-    
+mainloop()
