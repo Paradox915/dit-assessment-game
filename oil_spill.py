@@ -21,9 +21,20 @@ from tkinter import *
 
 #randomness
 import random
+
+# time
+import time
+
 # varibles 
 game_map = []
 enemys = []
+
+totorial_text_path = "toutorial.txt"
+totorial_text = ""
+
+# open and get the totorial text
+with open (totorial_text_path, "r") as file:
+    totorial_text=file.read()
 
 # the x and y size of the map
 x_size = 24 # 24
@@ -114,6 +125,19 @@ game_text_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg
 
 
 # functions
+
+# totorial
+def totorial(text = "totorial"):
+    # enable the text box to edit
+    game_text_box.config(state = "normal")
+    # clear the text box
+    game_text_box.delete("1.0",END)
+    # add some text
+    game_text_box.insert(END,text)
+    # disable editing of the text box
+    game_text_box.config(state = "disabled")
+    game_text_box.pack()
+
 
 # genarate a level
 def genarate_level(difficalty):
@@ -227,5 +251,8 @@ root.bind("<KeyRelease>",Key_pressed)
 
 # show the map
 update_map(" ")
+
+totorial(totorial_text)
+
 # start the main routine
 mainloop()
