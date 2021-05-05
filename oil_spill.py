@@ -105,7 +105,8 @@ class Player(Alive):
     def __init__(self, position, symbol, health_max, health, stamana, max_stamana):
         super().__init__(position, symbol, health_max, health)
         self.stamana = stamana
-        self.health_max = max_stamana
+        self.health_max = health_max
+        self.max_stamana = max_stamana
 
     # get the players inventory
     def get_inventory(self):
@@ -138,6 +139,18 @@ def totorial(text = "totorial"):
     game_text_box.config(state = "disabled")
     game_text_box.pack()
 
+# end the game after the player has died
+def player_death():
+    # enable the text box to edit
+    game_text_box.config(state = "normal")
+    # clear the text box
+    game_text_box.delete("1.0",END)
+    # add some text
+    game_text_box.insert(END,"you are dead")
+    # disable editing of the text box
+    game_text_box.config(state = "disabled")
+    game_text_box.pack()
+    
 
 # genarate a level
 def genarate_level(difficalty):
@@ -201,6 +214,22 @@ def update_map(char):
     # place the player on the map
     game_map[player.position[1]][player.position[0]] = player.symbol
 
+
+
+    # game logic
+    # check if the player is over water
+    if store == " ":
+        player.stamana -= 1
+        if player.stamana <= 0:
+            print("you are dead")
+            player_death()
+    elif store == "X":
+        print("enemy")
+    else:
+        if player.stamana < player.max_stamana:
+            player.stamana += 1
+    
+    print(player.stamana)
     # draw the map to the screen
     text = ""
     for row in game_map:
@@ -225,20 +254,11 @@ def update_map(char):
 # main routine
 
 # create the player
-player = Player((0,0),"&",100,100,100,100)
+player = Player((0,0),"&",100,100,10,10)
 
 # create the map and the land places
 game_map, land_pos = genarate_map.get_map(0.01,x_size,y_size)
 
-# #set the player position
-# player.position = random.choice(land_pos)
-
-
-# # set a starting store value
-# store = game_map[player.position[1]][player.position[0]]
-
-# # place the player on to the map
-# game_map[player.position[1]][player.position[0]] = player.symbol
 genarate_level(10)
 
 # set up the gui
