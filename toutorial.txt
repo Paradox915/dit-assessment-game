@@ -1,24 +1,23 @@
-Welcome to oil spill
-
-story
+Welcome to Oil Spill
+Story
 ----------------------------
-A large cargo ship carying a stupendus amount of oil has
-capsized!
-This is resulting in an influx of deadly oil in to the nataral ecosystem,
+A large cargo ship carrying a stupendous amount of oil has Capsized!
+
+You are a contractor hired to clean up oil. You need to clean up all of this oil 
+before any more wild life can tragically die.
+
+As well as this there is the slight problem of the oil mutating and forming
+monsters, you will have to kill these to clean up the oil.
+
+This is resulting in an influx of deadly oil in to the natural ecosystem,
 killing nearly all of the wild life.
-
-You a contractor hiered to clean up oil, needs too clean up all of this oil 
-before any more wild life can tragicly die.
-
-aswell as this there is the slight problem of the oil mutating and forming
-monsters, you will have to kill these to clean up the oil. 
 
 Good luck with your job.
 
-controls
+Controls
 ----------------------------
-up > w
-down > s
-left > a
-right > d
+up 	> w
+down 	> s
+left 	> a
+right 	> d
 press any key to start.
