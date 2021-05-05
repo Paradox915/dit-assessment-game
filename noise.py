@@ -42,7 +42,7 @@ def get_noise1d(_min, _max, step, ajusted_strgenth):
 # main routine
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-    numbers = get_noise1d(0,1000000,1,5)
+    numbers = get_noise1d(0,100,1,0)
 
     plt.plot(numbers)
     plt.show()
