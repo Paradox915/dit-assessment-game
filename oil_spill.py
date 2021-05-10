@@ -102,11 +102,10 @@ class Player(Alive):
     '''
     the player class
     '''
-    def __init__(self, position, symbol, health_max, health, stamana, max_stamana):
+    def __init__(self, position, symbol, health_max, health, stamina , max_stamina ):
         super().__init__(position, symbol, health_max, health)
-        self.stamana = stamana
-        self.health_max = health_max
-        self.max_stamana = max_stamana
+        self.stamina  = stamina 
+        self.max_stamina  = max_stamina 
 
     # get the players inventory
     def get_inventory(self):
@@ -125,6 +124,10 @@ root.title('oil spill')
 game_text_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "green", state = "disabled") 
 
 
+# initalise the ui for the player's stats
+stats_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "black", state = "disabled") 
+
+
 # functions
 
 # totorial
@@ -141,6 +144,7 @@ def totorial(text = "totorial"):
 
 # end the game after the player has died
 def player_death():
+    player.health = 0
     # enable the text box to edit
     game_text_box.config(state = "normal")
     # clear the text box
@@ -186,8 +190,11 @@ def Key_pressed(event):
     @retruns : none
     @throws : none
     '''
-    # update the map
-    update_map(event.char)
+    # update the map only if the player is not dead
+    if player.is_alive():
+        update_map(event.char)
+    else:
+        print("sorry you are dead")
 
 
 
@@ -219,17 +226,17 @@ def update_map(char):
     # game logic
     # check if the player is over water
     if store == " ":
-        player.stamana -= 1
-        if player.stamana <= 0:
+        player.stamina  -= 1
+        if player.stamina  <= 0:
             print("you are dead")
             player_death()
     elif store == "X":
         print("enemy")
     else:
-        if player.stamana < player.max_stamana:
-            player.stamana += 1
+        if player.stamina  < player.max_stamina :
+            player.stamina  += 1
     
-    print(player.stamana)
+    print("player stamina : ",player.stamina )
     # draw the map to the screen
     text = ""
     for row in game_map:
@@ -265,6 +272,8 @@ genarate_level(10)
 game_text_box.place(in_=root, anchor="c", relx=.5, rely=.5)
 root.configure(bg='light blue')
 root.geometry("1920x1080") 
+
+stats_box.place(in_= root, anchor="c", relx=1, rely=0)
 
 # bind the action of pressing a key to the keypressed function
 root.bind("<KeyRelease>",Key_pressed)  
