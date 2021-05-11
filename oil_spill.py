@@ -32,9 +32,16 @@ enemys = []
 totorial_text_path = "toutorial.txt"
 totorial_text = ""
 
+death_text_path = "death.txt"
+death_text = ""
 # open and get the totorial text
 with open (totorial_text_path, "r") as file:
     totorial_text=file.read()
+    
+    
+# open and get the totorial text
+with open (death_text_path, "r") as file:
+    death_text=file.read()
 
 # the x and y size of the map
 x_size = 24 # 24
@@ -125,7 +132,7 @@ game_text_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg
 
 
 # initalise the ui for the player's stats
-stats_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "black", state = "disabled") 
+stats_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "black", state = "normal") 
 
 
 # functions
@@ -150,7 +157,7 @@ def player_death():
     # clear the text box
     game_text_box.delete("1.0",END)
     # add some text
-    game_text_box.insert(END,"you are dead")
+    game_text_box.insert(END,death_text)
     # disable editing of the text box
     game_text_box.config(state = "disabled")
     game_text_box.pack()
@@ -255,6 +262,16 @@ def update_map(char):
     # disable editing of the text box
     game_text_box.config(state = "disabled")
     game_text_box.pack()
+    
+    # display stats
+    stats_box.config(state = "normal")
+
+    # clear the text box
+    stats_box.delete("1.0",END)    
+    
+    stats_box.insert(INSERT,"health : %d\nstamina : %d"%(player.health,player.stamina))
+    
+    stats_box.config(state = "disabled")    
 
 
 
@@ -273,7 +290,14 @@ game_text_box.place(in_=root, anchor="c", relx=.5, rely=.5)
 root.configure(bg='light blue')
 root.geometry("1920x1080") 
 
-stats_box.place(in_= root, anchor="c", relx=1, rely=0)
+
+stats_box.place(in_=root, anchor="c", relx=1, rely=0.1)
+
+stats_box.config(width = "39", height = "5")
+
+stats_box.insert(INSERT,"health : %d\nstamina : %d"%(player.health,player.stamina))
+
+stats_box.config(state = "disabled")
 
 # bind the action of pressing a key to the keypressed function
 root.bind("<KeyRelease>",Key_pressed)  
