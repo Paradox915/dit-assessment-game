@@ -14,6 +14,7 @@ def get_map(_max = 0.001, map_x = 10, map_y = 10):
     '''
     @param : float, int, int
     @returns : [[string]], [(int, int)]
+    @throws : 
     '''
 
     noise1 = PerlinNoise(octaves=3)
