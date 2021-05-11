@@ -25,6 +25,8 @@ import random
 # time
 import time
 
+# json
+import json
 # varibles 
 game_map = []
 enemys = []
@@ -34,6 +36,8 @@ totorial_text = ""
 
 death_text_path = "death.txt"
 death_text = ""
+
+data_main_path = "data_main.json"
 # open and get the totorial text
 with open (totorial_text_path, "r") as file:
     totorial_text=file.read()
@@ -43,11 +47,29 @@ with open (totorial_text_path, "r") as file:
 with open (death_text_path, "r") as file:
     death_text=file.read()
 
+
+# get the data in the json file
+with open(data_main_path) as file:
+    data_main = json.load(file)
+
 # the x and y size of the map
 x_size = 24 # 24
 y_size = 80 # 80
 
 store = ""
+
+
+# create tkinter game_text_box 
+root = Tk() 
+root.title('oil spill') 
+
+# initalise the main text box for the game screen
+game_text_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "green", state = "disabled") 
+
+
+# initalise the ui for the player's stats
+stats_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "black", state = "normal") 
+
 # classes
 class Alive:
     '''
@@ -123,17 +145,6 @@ class Player(Alive):
         '''
         pass
 
-# create tkinter game_text_box 
-root = Tk() 
-root.title('oil spill') 
-
-# initalise the main text box for the game screen
-game_text_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "green", state = "disabled") 
-
-
-# initalise the ui for the player's stats
-stats_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "black", state = "normal") 
-
 
 # functions
 
@@ -186,7 +197,7 @@ def genarate_level(difficalty):
     # generate the enemys and place them on to the map
     enemys = []
     for i in range(int(difficalty)):
-        enemys.append(Enemy(random.choice(land_pos),"X",10,10))
+        enemys.append(Enemy(random.choice(land_pos),"x",10,10))
         game_map[enemys[i].position[1]][enemys[i].position[0]] = enemys[i].symbol
     
 
@@ -200,8 +211,6 @@ def Key_pressed(event):
     # update the map only if the player is not dead
     if player.is_alive():
         update_map(event.char)
-    else:
-        print("sorry you are dead")
 
 
 
