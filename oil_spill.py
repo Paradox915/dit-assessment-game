@@ -148,6 +148,18 @@ class Player(Alive):
 
 # functions
 
+# fight a monster
+def battle():
+    # display the players possible moves
+    #B = Button(root, text ="Hello")
+    #B.pack()
+    #B.pack_forget()
+    button_attacks = []
+    for move in data_main["player"]["inventory"]:
+        print(data_main["player"]["inventory"][move])
+        button_attacks.append(Button(root, text = move))
+    for button in button_attacks:
+        button.pack()
 # totorial
 def totorial(text = "totorial"):
     # enable the text box to edit
@@ -252,7 +264,7 @@ def update_map(char):
         if player.stamina  < player.max_stamina :
             player.stamina  += 1
     
-    print("player stamina : ",player.stamina )
+    # print("player stamina : ",player.stamina )
     # draw the map to the screen
     text = ""
     for row in game_map:
@@ -281,8 +293,7 @@ def update_map(char):
     stats_box.insert(INSERT,"health : %d\nstamina : %d"%(player.health,player.stamina))
     
     stats_box.config(state = "disabled")    
-
-
+    battle()
 
 # main routine
 
