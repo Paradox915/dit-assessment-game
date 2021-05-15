@@ -115,4 +115,4 @@ if __name__ == "__main__":
     grid_y = 50
 
     obstacales = [(2,2),(1,2),(0,2),(2,1)]
-    print("the path is: ",a_star(grid_x, grid_y, obstacales,(1,1),(50000,50000)))
+    print("the path is: ",a_star(grid_x, grid_y, obstacales,(1,1),(50,50)))
