@@ -111,8 +111,41 @@ def a_star(grid_x, grid_y, obstacales, start, end):
 
 # testing from the main file
 if __name__ == "__main__":
-    grid_x = 50
-    grid_y = 50
+    grid_x = 10
+    grid_y = 10
+    player_pos = (1,1)
+    end_pos = (9,9)
 
     obstacales = [(2,2),(1,2),(0,2),(2,1)]
-    print("the path is: ",a_star(grid_x, grid_y, obstacales,(1,1),(50,50)))
+    path = a_star(grid_x, grid_y, obstacales,end_pos, player_pos)
+
+
+    #the map
+    _map = []
+    for x in range(grid_x):
+        row = []
+        for y in range(grid_y):
+            row.append("#")
+        _map.append(row)
+
+
+    _map[player_pos[0]][player_pos[1]] = "&"
+    print(_map[1][1])
+    for row in _map:
+        print(row)
+    for obstical in obstacales:
+        print(obstical)
+        _map[obstical[0]][obstical[1]] = "X"
+        print(_map[1][1])
+        for row in _map:
+            print(row)
+
+    # show the path
+    for item in path:
+        #print(item)
+        _map[item[0]][item[1]] = "&"
+        _map[player_pos[0]][player_pos[1]] = "#"
+        player_pos = item
+        for row in _map:
+            print(row)
+        input("")
