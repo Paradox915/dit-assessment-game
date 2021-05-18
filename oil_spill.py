@@ -40,6 +40,9 @@ death_text = ""
 # if the player is in a fight
 in_battle = False
 
+# list of chartures that the enemys use
+enemy_chars = []
+
 data_main_path = "data_main.json"
 # open and get the totorial text
 with open (totorial_text_path, "r") as file:
@@ -121,6 +124,11 @@ class Enemy(Alive):
     '''
     enimys
     '''
+    def __init__(self, position, symbol, health, stamina,health_max, enemy_type):
+        super().__init__(position, symbol, health, health_max)
+        self.stamina  = stamina 
+        self.enemy_type = enemy_type
+        #self.health = health
     # return the path for the enemy
     def get_path(self):
         '''
@@ -167,8 +175,15 @@ def battle():
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
     
-    
-    text = '''you are in a fight.\nyou need to kill the %s to clean up the oil'''#%()
+    # find the index of the enemy tat is in the battle
+    index_enemy = "none"
+    for i in range(len(enemys)):
+        if enemys[i].position == player.position:
+            index_enemy = i
+            break
+
+    text = '''You are in a fight.\nYou need to kill the %s to clean up the oil!\nThe %s has got %d health
+    '''%(enemys[index_enemy].enemy_type,enemys[index_enemy].enemy_type,enemys[index_enemy].health)
     
     game_text_box.insert(END,text)
     # disable editing of the text box
@@ -208,7 +223,7 @@ def genarate_level(difficalty):
     @returns : none
     @throws : valueError
     '''
-    global game_map, enemys, store
+    global game_map, enemys, store, enemy_types, data_main
     # create the map and the land places
     game_map, land_pos = genarate_map.get_map(0.01,x_size,y_size)
 
@@ -224,7 +239,10 @@ def genarate_level(difficalty):
     # generate the enemys and place them on to the map
     enemys = []
     for i in range(int(difficalty)):
-        enemys.append(Enemy(random.choice(land_pos),"x",10,10))
+        enemy_current_type = random.choice(enemy_types)
+        enemy_current = data_main["enemys"][enemy_current_type]
+        #print(enemy_current)
+        enemys.append(Enemy(random.choice(land_pos),enemy_current["symbol"],enemy_current["health"],enemy_current["stamina"],enemy_current["health"],enemy_current_type))
         game_map[enemys[i].position[1]][enemys[i].position[0]] = enemys[i].symbol
     
 
@@ -273,7 +291,7 @@ def update_map(char):
         if player.stamina  <= 0:
             print("you are dead")
             player_death()
-    elif store == "x":
+    elif store in enemy_chars:
         print("enemy")
         in_battle = True
         battle()
@@ -314,10 +332,15 @@ def update_map(char):
 # main routine
 
 # create the player
-player = Player((0,0),"&",100,100,10,10)
+player = Player((0,0),"&",100,100,20,20)
 
 # create the map and the land places
 game_map, land_pos = genarate_map.get_map(0.01,x_size,y_size)
+
+# get the enemys symbles
+enemy_types = list(data_main["enemys"].keys())
+for item in data_main["enemys"]:
+    enemy_chars.append(data_main["enemys"][item]["symbol"])
 
 genarate_level(10)
 

@@ -25,7 +25,7 @@
 {
     "goblin":
     {
-        "symbol": "x",
+        "symbol": "G",
 
         "health": 10,
         "stamina": 5,
@@ -44,7 +44,7 @@
 
     "troll":
     {
-        "symbol": "X",
+        "symbol": "T",
 
         "health": 50,
         "stamina": 12,
