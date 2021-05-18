@@ -37,6 +37,9 @@ totorial_text = ""
 death_text_path = "death.txt"
 death_text = ""
 
+# if the player is in a fight
+in_battle = False
+
 data_main_path = "data_main.json"
 # open and get the totorial text
 with open (totorial_text_path, "r") as file:
@@ -151,15 +154,27 @@ class Player(Alive):
 # fight a monster
 def battle():
     # display the players possible moves
-    #B = Button(root, text ="Hello")
-    #B.pack()
-    #B.pack_forget()
+    global in_battle
     button_attacks = []
     for move in data_main["player"]["inventory"]:
         print(data_main["player"]["inventory"][move])
         button_attacks.append(Button(root, text = move))
     for button in button_attacks:
         button.pack()
+        
+    # get which enemy that the player is figthing
+    
+    game_text_box.config(state = "normal")    
+    game_text_box.delete("1.0",END)
+    
+    
+    text = '''you are in a fight.\nyou need to kill the %s to clean up the oil'''#%()
+    
+    game_text_box.insert(END,text)
+    # disable editing of the text box
+    game_text_box.config(state = "disabled")
+    game_text_box.pack()    
+    
 # totorial
 def totorial(text = "totorial"):
     # enable the text box to edit
@@ -221,7 +236,7 @@ def Key_pressed(event):
     @throws : none
     '''
     # update the map only if the player is not dead
-    if player.is_alive():
+    if player.is_alive() and not in_battle:
         update_map(event.char)
 
 
@@ -234,7 +249,7 @@ def update_map(char):
     @returns : none
     @throws : valueError
     '''
-    global store, game_map, player, enemys
+    global store, game_map, player, enemys, in_battle
     # enable the text box to edit
     game_text_box.config(state = "normal")
     # clear the text box
@@ -258,8 +273,10 @@ def update_map(char):
         if player.stamina  <= 0:
             print("you are dead")
             player_death()
-    elif store == "X":
+    elif store == "x":
         print("enemy")
+        in_battle = True
+        battle()
     else:
         if player.stamina  < player.max_stamina :
             player.stamina  += 1
@@ -293,7 +310,6 @@ def update_map(char):
     stats_box.insert(INSERT,"health : %d\nstamina : %d"%(player.health,player.stamina))
     
     stats_box.config(state = "disabled")    
-    battle()
 
 # main routine
 
