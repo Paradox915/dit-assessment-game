@@ -40,6 +40,7 @@ death_text = ""
 # if the player is in a fight
 in_battle = False
 
+
 # list of chartures that the enemys use
 enemy_chars = []
 
@@ -158,7 +159,13 @@ class Player(Alive):
 
 
 # functions
-
+# the player attacking
+def attack_player(move):
+    game_text_box.config(state = "normal")    
+    game_text_box.delete("1.0",END)
+    text = '''You used %s'''%move
+        
+    game_text_box.insert(END,text)    
 # fight a monster
 def battle():
     # display the players possible moves
@@ -166,16 +173,17 @@ def battle():
     button_attacks = []
     for move in data_main["player"]["inventory"]:
         print(data_main["player"]["inventory"][move])
-        button_attacks.append(Button(root, text = move))
+        button_attacks.append(Button(root, text = move, command = lambda: attack_player(move)))
     for button in button_attacks:
         button.pack()
+        print("move name",button.config('text')[-1])
         
     # get which enemy that the player is figthing
     
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
     
-    # find the index of the enemy tat is in the battle
+    # find the index of the enemy that is in the battle
     index_enemy = "none"
     for i in range(len(enemys)):
         if enemys[i].position == player.position:
