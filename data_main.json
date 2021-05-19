@@ -17,6 +17,13 @@
             "damage_max": 5,
             "stamana_drain": 1,
             "description": "a strong reliable punch sure to get you out of any situation"
+        },
+        "slap":
+        {
+            "damage_min": 1,
+            "damage_max": 1,
+            "stamana_drain": 1,
+            "description": "a weak slap sure to leave a mark that will fade in seconds"
         }
     }
 },

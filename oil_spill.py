@@ -65,6 +65,8 @@ y_size = 80 # 80
 
 store = ""
 
+# the buttons
+button_attacks = []
 
 # create tkinter game_text_box 
 root = Tk() 
@@ -160,26 +162,21 @@ class Player(Alive):
 
 # functions
 # the player attacking
-def attack_player(move):
+def attack_player(move,index_enemy):
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
-    text = '''You used %s'''%move
-        
+    #print("the move: ", move)
+    print("the enemy: ", enemys[index_enemy])
+    damage = random.randint(data_main["player"]["inventory"][move]["damage_max"],data_main["player"]["inventory"][move]["damage_min"])
+    text = '''You used %s
+%s does %d damage to the %s and used %d stamina
+the %s is now on %d health'''%(move,move,damage,enemys[index_enemy].enemy_type,data_main["player"]["inventory"][move]["stamana_drain"],enemys[index_enemy].enemy_type,enemys[index_enemy].health)
+    print("move name is",button_attacks[0].config('text')[-1])    
     game_text_box.insert(END,text)    
 # fight a monster
 def battle():
-    # display the players possible moves
-    global in_battle
-    button_attacks = []
-    for move in data_main["player"]["inventory"]:
-        print(data_main["player"]["inventory"][move])
-        button_attacks.append(Button(root, text = move, command = lambda: attack_player(move)))
-    for button in button_attacks:
-        button.pack()
-        print("move name",button.config('text')[-1])
-        
+    global in_battle, button_attacks      
     # get which enemy that the player is figthing
-    
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
     
@@ -198,6 +195,16 @@ def battle():
     game_text_box.config(state = "disabled")
     game_text_box.pack()    
     
+    # display the players possible moves
+    
+    button_attacks = []
+    for move in data_main["player"]["inventory"]:
+        print(data_main["player"]["inventory"][move])
+        button_attacks.append(Button(root, text = move, command = lambda: attack_player(move,index_enemy)))
+    for button in button_attacks:
+        button.pack()
+        print("move name is",button.config('text')[-1])
+  
 # totorial
 def totorial(text = "totorial"):
     # enable the text box to edit
