@@ -162,11 +162,10 @@ class Player(Alive):
 
 # functions
 # the player attacking
-def attack_player(index_enemy):
+def attack_player(index_enemy,move):
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
-    #print("the move: ", move)
-    move = event.widget
+    print("the move: ", move)
     print("the enemy: ", enemys[index_enemy])
     print("move name is",move)
     damage = random.randint(data_main["player"]["inventory"][move]["damage_max"],data_main["player"]["inventory"][move]["damage_min"])
@@ -177,7 +176,7 @@ the %s is now on %d health'''%(move,move,damage,enemys[index_enemy].enemy_type,d
     game_text_box.insert(END,text)    
 # fight a monster
 def battle():
-    global in_battle, button_attacks      
+    global in_battle      
     # get which enemy that the player is figthing
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
@@ -193,21 +192,26 @@ def battle():
     '''%(enemys[index_enemy].enemy_type,enemys[index_enemy].enemy_type,enemys[index_enemy].health)
     
     game_text_box.insert(END,text)
-    # disable editing of the text box
-    game_text_box.config(state = "disabled")
-    game_text_box.pack()    
+       
     
     # display the players possible moves
     
+    game_text_box.insert(END,"\nyour moves are:")
     button_attacks = []
     for move in data_main["player"]["inventory"]:
         print(data_main["player"]["inventory"][move])
-        button_attacks.append(Button(root, text = move))
-        button_attacks[-1].bind('<Button-1>', attack_player(index_enemy))
+        button_attacks.append(move)
     for button in button_attacks:
-        button.pack()
-        #print("move name is",button.config('text')[-1])
-  
+        game_text_box.insert(END,"\n"+button)
+        # disable editing of the text box
+    game_text_box.config(state = "disabled")
+    game_text_box.pack()   
+    
+    # get which move the player is useing
+    enter_box = Entry(root,textvariable = "move?")
+    enter_box.pack()
+    button_enter = Button(root,text ="what move?", command = lambda: attack_player(index_enemy, enter_box.get()))
+    button_enter.pack()
 # totorial
 def totorial(text = "totorial"):
     # enable the text box to edit
