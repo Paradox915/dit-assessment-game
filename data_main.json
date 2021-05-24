@@ -1,44 +1,23 @@
 {
-"player":
-{
-    "symbol": "&",
-
-    "health": 100,
-    "stamina": 10,
-
-    "health_max": 100,
-    "stamina_max": 10,
-
-    "inventory": 
+    "player":
     {
-        "punch":
-        {
-            "damage_min": 1,
-            "damage_max": 5,
-            "stamana_drain": 1,
-            "description": "a strong reliable punch sure to get you out of any situation"
-        },
-        "slap":
-        {
-            "damage_min": 1,
-            "damage_max": 1,
-            "stamana_drain": 1,
-            "description": "a weak slap sure to leave a mark that will fade in seconds"
-        }
-    }
-},
-
-"enemys":
-{
-    "goblin":
-    {
-        "symbol": "G",
-
-        "health": 10,
-        "stamina": 5,
-
+        "symbol": "&",
+    
+        "health": 100,
+        "stamina": 10,
+    
+        "health_max": 100,
+        "stamina_max": 10,
+    
         "inventory": 
         {
+            "punch":
+            {
+                "damage_min": 2,
+                "damage_max": 5,
+                "stamana_drain": 1,
+                "description": "a strong reliable punch sure to get you out of any situation"
+            },
             "slap":
             {
                 "damage_min": 1,
@@ -48,55 +27,76 @@
             }
         }
     },
-
-    "troll":
+    
+    "enemys":
     {
-        "symbol": "T",
-
-        "health": 50,
-        "stamina": 12,
-        "inventory": 
+        "goblin":
+        {
+            "symbol": "G",
+    
+            "health": 10,
+            "stamina": 5,
+    
+            "inventory": 
+            {
+                "slap":
+                {
+                    "damage_min": 1,
+                    "damage_max": 1,
+                    "stamana_drain": 1,
+                    "description": "a weak slap sure to leave a mark that will fade in seconds"
+                }
+            }
+        },
+    
+        "troll":
+        {
+            "symbol": "T",
+    
+            "health": 50,
+            "stamina": 12,
+            "inventory": 
+            {
+                "club":
+                {
+                    "damage_min": 3,
+                    "damage_max": 20,
+                    "stamana_drain": 3,
+                    "description": "a strong club that has a high chance to miss and do little damage"
+                }
+            }
+        }
+        
+    },
+    
+    "items":
+    {
+        "wepons":
         {
             "club":
-            {
-                "damage_min": 3,
-                "damage_max": 20,
-                "stamana_drain": 3,
-                "description": "a strong club that has a high chance to miss and do little damage"
-            }
+                {
+                    "damage_min": 3,
+                    "damage_max": 20,
+                    "stamana_drain": 3,
+                    "description": "a strong club that has a high chance to miss and do little damage"
+                },
+            
+                "slap":
+                {
+                    "damage_min": 1,
+                    "damage_max": 1,
+                    "stamana_drain": 1,
+                    "description": "a weak slap sure to leave a mark that will fade in seconds"
+                },
+    
+                "punch":
+                {
+                    "damage_min": 1,
+                    "damage_max": 5,
+                    "stamana_drain": 1,
+                    "description": "a strong reliable punch sure to get you out of any situation"
+                }
         }
     }
     
-},
-
-"items":
-{
-    "wepons":
-    {
-        "club":
-            {
-                "damage_min": 3,
-                "damage_max": 20,
-                "stamana_drain": 3,
-                "description": "a strong club that has a high chance to miss and do little damage"
-            },
-        
-            "slap":
-            {
-                "damage_min": 1,
-                "damage_max": 1,
-                "stamana_drain": 1,
-                "description": "a weak slap sure to leave a mark that will fade in seconds"
-            },
-
-            "punch":
-            {
-                "damage_min": 1,
-                "damage_max": 5,
-                "stamana_drain": 1,
-                "description": "a strong reliable punch sure to get you out of any situation"
-            }
     }
-}
-
-}

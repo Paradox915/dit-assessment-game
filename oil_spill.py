@@ -59,6 +59,7 @@ with open (death_text_path, "r") as file:
 with open(data_main_path) as file:
     data_main = json.load(file)
 
+#print(data_main["player"]["inventory"])
 # the x and y size of the map
 x_size = 24 # 24
 y_size = 80 # 80
@@ -162,13 +163,20 @@ class Player(Alive):
 
 # functions
 # the player attacking
-def attack_player(index_enemy,move):
+def attack_player(index_enemy, button):
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
-    print("the move: ", move)
+    #print("the move: ", move)
+    
+    move = button.config('text')[-1]
+    print("\n\n\n\n")
+    print(move)
+    print(data_main["player"]["inventory"][move]["damage_max"],data_main["player"]["inventory"][move]["damage_min"])
+    print("\n\n\n\n")
     print("the enemy: ", enemys[index_enemy])
     print("move name is",move)
-    damage = random.randint(data_main["player"]["inventory"][move]["damage_max"],data_main["player"]["inventory"][move]["damage_min"])
+    
+    damage = random.randint(int(data_main["player"]["inventory"][move]["damage_min"]),int(data_main["player"]["inventory"][move]["damage_max"]))
     text = '''You used %s
 %s does %d damage to the %s and used %d stamina
 the %s is now on %d health'''%(move,move,damage,enemys[index_enemy].enemy_type,data_main["player"]["inventory"][move]["stamana_drain"],enemys[index_enemy].enemy_type,enemys[index_enemy].health)
@@ -176,7 +184,7 @@ the %s is now on %d health'''%(move,move,damage,enemys[index_enemy].enemy_type,d
     game_text_box.insert(END,text)    
 # fight a monster
 def battle():
-    global in_battle      
+    global in_battle, button_attacks      
     # get which enemy that the player is figthing
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
@@ -192,26 +200,21 @@ def battle():
     '''%(enemys[index_enemy].enemy_type,enemys[index_enemy].enemy_type,enemys[index_enemy].health)
     
     game_text_box.insert(END,text)
-       
+    # disable editing of the text box
+    game_text_box.config(state = "disabled")
+    game_text_box.pack()    
     
     # display the players possible moves
     
-    game_text_box.insert(END,"\nyour moves are:")
     button_attacks = []
     for move in data_main["player"]["inventory"]:
         print(data_main["player"]["inventory"][move])
-        button_attacks.append(move)
+        button_attacks.append(Button(root, text = move))
+        button_attacks[-1]["command"] = lambda move_in = button_attacks[-1]: attack_player(index_enemy,move_in)
     for button in button_attacks:
-        game_text_box.insert(END,"\n"+button)
-        # disable editing of the text box
-    game_text_box.config(state = "disabled")
-    game_text_box.pack()   
-    
-    # get which move the player is useing
-    enter_box = Entry(root,textvariable = "move?")
-    enter_box.pack()
-    button_enter = Button(root,text ="what move?", command = lambda: attack_player(index_enemy, enter_box.get()))
-    button_enter.pack()
+        button.pack()
+        #print("move name is",button.config('text')[-1])
+  
 # totorial
 def totorial(text = "totorial"):
     # enable the text box to edit
