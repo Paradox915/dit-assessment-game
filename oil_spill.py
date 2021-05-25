@@ -162,40 +162,71 @@ class Player(Alive):
 
 
 # functions
+
+# the monster attacking the player
+def monster_attack(index_enemy):
+    # the monster attacking the player
+    global data_main
+    # get monster data
+    monster_data = data_main["enemys"][enemys[index_enemy].enemy_type]["inventory"]
+
+    # get the move
+    move = random.choice(list(monster_data))
+
+    damage = random.randint(monster_data[move]["damage_min"],monster_data[move]["damage_max"])
+
+    player.health -= damage
+
+    game_text_box.config(state = "normal")    
+    game_text_box.delete("1.0",END)
+
+    text = """
+%s used %s the attack did %d points of damage.
+you are now on %d health.    
+    """%(enemys[index_enemy].enemy_type, move, damage, player.health) 
+   
+
+    game_text_box.insert(END,text) 
+    game_text_box.config(state="disabled")
+
+
 # the player attacking
 def attack_player(index_enemy, button):
-    global in_battle, button_attacks
-    if enemys[index_enemy].is_alive() == False:
-        print("dead")
-        in_battle = False
-        game_map[enemys[index_enemy].pos[0]][enemys[index_enemy].pos]
-        enemys.pop(index_enemy)
-        for button in button_attacks:
-            button.pack_forget()
-        return
+    global in_battle, button_attacks,game_map,store
+    
     
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
     #print("the move: ", move)
     
     move = button.config('text')[-1]
-    print("\n\n\n\n")
-    print(move)
-    print(data_main["player"]["inventory"][move]["damage_max"],data_main["player"]["inventory"][move]["damage_min"])
-    print("\n\n\n\n")
-    print("the enemy: ", enemys[index_enemy])
-    print("move name is",move)
     
     damage = random.randint(int(data_main["player"]["inventory"][move]["damage_min"]),int(data_main["player"]["inventory"][move]["damage_max"]))
     print("enemy hp",enemys[index_enemy].health)
     enemys[index_enemy].health -= damage
     print("enemy hp",enemys[index_enemy].health)
-    
     text = '''You used %s
 %s does %d damage to the %s and used %d stamina
 the %s is now on %d health'''%(move,move,damage,enemys[index_enemy].enemy_type,data_main["player"]["inventory"][move]["stamana_drain"],enemys[index_enemy].enemy_type,enemys[index_enemy].health)
+    monster_attack(index_enemy) 
+    
+    if enemys[index_enemy].is_alive() == False:
+        print("dead")
+        in_battle = False
+        print("the enemy is: ", game_map[enemys[index_enemy].position[1]][enemys[index_enemy].position[0]])
+        game_map[enemys[index_enemy].position[1]][enemys[index_enemy].position[0]] = "#"
+        store = "#"
+        print("the enemy is: ", game_map[enemys[index_enemy].position[1]][enemys[index_enemy].position[0]])
         
-    game_text_box.insert(END,text)    
+        for button in button_attacks:
+            button.pack_forget()
+        text = "you defeted the %s\nthis is a very good thing because the amount of oil has been depleted good job\n\nClick any button to continue."%enemys[index_enemy].enemy_type
+        game_text_box.insert(END,text) 
+        game_text_box.config(state="disabled") 
+        enemys.pop(index_enemy)
+        return
+    game_text_box.insert(END,text) 
+    game_text_box.config(state="disabled")   
 # fight a monster
 def battle():
     global in_battle, button_attacks      

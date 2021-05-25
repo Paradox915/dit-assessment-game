@@ -24,7 +24,14 @@
                 "damage_max": 1,
                 "stamana_drain": 1,
                 "description": "a weak slap sure to leave a mark that will fade in seconds"
-            }
+            },
+            "rest":
+                {
+                    "damage_min": 0,
+                    "damage_max": 0,
+                    "stamana_drain": -2,
+                    "description": "you feel a rested and a bit of your stamana is returned"
+                }
         }
     },
     
@@ -65,6 +72,23 @@
                     "description": "a strong club that has a high chance to miss and do little damage"
                 }
             }
+        },
+        "kerren":
+        {
+            "symbol": "K",
+    
+            "health": 20,
+            "stamina": 12,
+            "inventory": 
+            {
+                "anime":
+                {
+                    "damage_min": 1,
+                    "damage_max": 30,
+                    "stamana_drain": 2,
+                    "description": "you feel a little bit of your soal leave your body as you are slowly converted into a weeb"
+                }
+            }
         }
         
     },
@@ -95,8 +119,22 @@
                     "damage_max": 5,
                     "stamana_drain": 1,
                     "description": "a strong reliable punch sure to get you out of any situation"
+                },
+                "anime":
+                {
+                    "damage_min": 1,
+                    "damage_max": 30,
+                    "stamana_drain": 2,
+                    "description": "you feel a little bit of your soal leave your body as you are converted into a weeb"
+                },
+                "rest":
+                {
+                    "damage_min": 0,
+                    "damage_max": 0,
+                    "stamana_drain": -2,
+                    "description": "you feel a rested and a bit of your stamana is returned"
                 }
         }
     }
     
-    }
+}
