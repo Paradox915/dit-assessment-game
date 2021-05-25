@@ -73,6 +73,7 @@ button_attacks = []
 root = Tk() 
 root.title('oil spill') 
 
+
 # initalise the main text box for the game screen
 game_text_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "green", state = "disabled") 
 
@@ -166,7 +167,7 @@ class Player(Alive):
 # the monster attacking the player
 def monster_attack(index_enemy):
     # the monster attacking the player
-    global data_main
+    global data_main, button_attacks, exit_button
     # get monster data
     monster_data = data_main["enemys"][enemys[index_enemy].enemy_type]["inventory"]
 
@@ -176,7 +177,12 @@ def monster_attack(index_enemy):
     damage = random.randint(monster_data[move]["damage_min"],monster_data[move]["damage_max"])
 
     player.health -= damage
-
+    
+    for button in button_attacks:
+        button.pack_forget()
+    
+        
+    exit_button.pack()
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
 
@@ -229,8 +235,11 @@ the %s is now on %d health'''%(move,move,damage,enemys[index_enemy].enemy_type,d
     game_text_box.config(state="disabled")   
 # fight a monster
 def battle():
-    global in_battle, button_attacks      
+    global in_battle, button_attacks, exit_button      
     # get which enemy that the player is figthing
+    
+    if exit_button.winfo_viewable():
+        exit_button.pack_forget()
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
     
@@ -419,6 +428,8 @@ game_text_box.place(in_=root, anchor="c", relx=.5, rely=.5)
 root.configure(bg='light blue')
 root.geometry("1920x1080") 
 
+# exit button
+exit_button = Button(root, text = "continue", command = battle)
 
 stats_box.place(in_=root, anchor="c", relx=1, rely=0.1)
 
