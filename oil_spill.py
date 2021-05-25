@@ -164,6 +164,16 @@ class Player(Alive):
 # functions
 # the player attacking
 def attack_player(index_enemy, button):
+    global in_battle, button_attacks
+    if enemys[index_enemy].is_alive() == False:
+        print("dead")
+        in_battle = False
+        game_map[enemys[index_enemy].pos[0]][enemys[index_enemy].pos]
+        enemys.pop(index_enemy)
+        for button in button_attacks:
+            button.pack_forget()
+        return
+    
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
     #print("the move: ", move)
@@ -177,6 +187,10 @@ def attack_player(index_enemy, button):
     print("move name is",move)
     
     damage = random.randint(int(data_main["player"]["inventory"][move]["damage_min"]),int(data_main["player"]["inventory"][move]["damage_max"]))
+    print("enemy hp",enemys[index_enemy].health)
+    enemys[index_enemy].health -= damage
+    print("enemy hp",enemys[index_enemy].health)
+    
     text = '''You used %s
 %s does %d damage to the %s and used %d stamina
 the %s is now on %d health'''%(move,move,damage,enemys[index_enemy].enemy_type,data_main["player"]["inventory"][move]["stamana_drain"],enemys[index_enemy].enemy_type,enemys[index_enemy].health)
