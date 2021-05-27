@@ -66,6 +66,8 @@ y_size = 80 # 80
 
 store = ""
 
+index_enemy = None
+
 # the buttons
 button_attacks = []
 
@@ -129,9 +131,8 @@ class Enemy(Alive):
     '''
     enimys
     '''
-    def __init__(self, position, symbol, health, stamina,health_max, enemy_type):
+    def __init__(self, position, symbol, health,health_max, enemy_type):
         super().__init__(position, symbol, health, health_max)
-        self.stamina  = stamina 
         self.enemy_type = enemy_type
         #self.health = health
     # return the path for the enemy
@@ -152,22 +153,16 @@ class Player(Alive):
         self.stamina  = stamina 
         self.max_stamina  = max_stamina 
 
-    # get the players inventory
-    def get_inventory(self):
-        '''
-        @param : 
-        @returns :
-        @throws :
-        '''
-        pass
-
 
 # functions
 
 # the monster attacking the player
-def monster_attack(index_enemy):
+def monster_attack():
     # the monster attacking the player
-    global data_main, button_attacks, exit_button
+    global data_main, button_attacks, exit_button, index_enemy, continue_fight
+
+    continue_fight.pack_forget()
+
     # get monster data
     monster_data = data_main["enemys"][enemys[index_enemy].enemy_type]["inventory"]
 
@@ -180,14 +175,12 @@ def monster_attack(index_enemy):
     
     for button in button_attacks:
         button.pack_forget()
-    
         
     exit_button.pack()
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
 
-    text = """
-%s used %s the attack did %d points of damage.
+    text = """%s used %s the attack did %d points of damage.
 you are now on %d health.    
     """%(enemys[index_enemy].enemy_type, move, damage, player.health) 
    
@@ -197,8 +190,8 @@ you are now on %d health.
 
 
 # the player attacking
-def attack_player(index_enemy, button):
-    global in_battle, button_attacks,game_map,store
+def attack_player(button):
+    global in_battle, button_attacks,game_map,store, index_enemy, continue_fight
     
     
     game_text_box.config(state = "normal")    
@@ -211,10 +204,24 @@ def attack_player(index_enemy, button):
     print("enemy hp",enemys[index_enemy].health)
     enemys[index_enemy].health -= damage
     print("enemy hp",enemys[index_enemy].health)
-    text = '''You used %s
-%s does %d damage to the %s and used %d stamina
-the %s is now on %d health'''%(move,move,damage,enemys[index_enemy].enemy_type,data_main["player"]["inventory"][move]["stamana_drain"],enemys[index_enemy].enemy_type,enemys[index_enemy].health)
-    monster_attack(index_enemy) 
+
+    # do stuff with the stamana
+    player.stamina -= data_main["player"]["inventory"][move]["stamana_drain"]
+
+    if player.stamina > player.max_stamina:
+        player.stamina = player.max_stamina
+    elif player.stamina <= 0:
+        for button in button_attacks:
+            button.pack_forget()
+        player_death()
+
+    text = '''You used %s.\n
+%s\n
+%s does %d damage to the %s and used %d stamina.\n
+the %s is now on %d health.
+you are now on %d stamana.'''%(move,data_main["player"]["inventory"][move]["description"],move,damage,enemys[index_enemy].enemy_type,data_main["player"]["inventory"][move]["stamana_drain"],enemys[index_enemy].enemy_type,enemys[index_enemy].health,player.stamina)
+    for button in button_attacks:
+            button.pack_forget()
     
     if enemys[index_enemy].is_alive() == False:
         print("dead")
@@ -230,12 +237,19 @@ the %s is now on %d health'''%(move,move,damage,enemys[index_enemy].enemy_type,d
         game_text_box.insert(END,text) 
         game_text_box.config(state="disabled") 
         enemys.pop(index_enemy)
+
+        # set player health back up to max
+        player.health =player.health_max
         return
+    
+    # let the player decide when to contine the fight
+    continue_fight.pack()
+
     game_text_box.insert(END,text) 
     game_text_box.config(state="disabled")   
 # fight a monster
 def battle():
-    global in_battle, button_attacks, exit_button      
+    global in_battle, button_attacks, exit_button, index_enemy      
     # get which enemy that the player is figthing
     
     if exit_button.winfo_viewable():
@@ -243,6 +257,9 @@ def battle():
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
     
+    if not player.is_alive():
+        player_death()
+
     # find the index of the enemy that is in the battle
     index_enemy = "none"
     for i in range(len(enemys)):
@@ -250,7 +267,8 @@ def battle():
             index_enemy = i
             break
 
-    text = '''You are in a fight.\nYou need to kill the %s to clean up the oil!\nThe %s has got %d health
+    text = '''You are in a fight.\nYou need to kill the %s to clean up the oil!\nThe %s has got %d health.\n
+click on the buttons below to use a move.
     '''%(enemys[index_enemy].enemy_type,enemys[index_enemy].enemy_type,enemys[index_enemy].health)
     
     game_text_box.insert(END,text)
@@ -264,7 +282,7 @@ def battle():
     for move in data_main["player"]["inventory"]:
         print(data_main["player"]["inventory"][move])
         button_attacks.append(Button(root, text = move))
-        button_attacks[-1]["command"] = lambda move_in = button_attacks[-1]: attack_player(index_enemy,move_in)
+        button_attacks[-1]["command"] = lambda move_in = button_attacks[-1]: attack_player(move_in)
     for button in button_attacks:
         button.pack()
         #print("move name is",button.config('text')[-1])
@@ -321,7 +339,7 @@ def genarate_level(difficalty):
         enemy_current_type = random.choice(enemy_types)
         enemy_current = data_main["enemys"][enemy_current_type]
         #print(enemy_current)
-        enemys.append(Enemy(random.choice(land_pos),enemy_current["symbol"],enemy_current["health"],enemy_current["stamina"],enemy_current["health"],enemy_current_type))
+        enemys.append(Enemy(random.choice(land_pos),enemy_current["symbol"],enemy_current["health"],enemy_current["health"],enemy_current_type))
         game_map[enemys[i].position[1]][enemys[i].position[0]] = enemys[i].symbol
     
 
@@ -411,7 +429,7 @@ def update_map(char):
 # main routine
 
 # create the player
-player = Player((0,0),"&",100,100,20,20)
+player = Player((0,0),data_main["player"]["symbol"],data_main["player"]["health_max"],data_main["player"]["health"],data_main["player"]["stamina"],data_main["player"]["stamina_max"])
 
 # create the map and the land places
 game_map, land_pos = genarate_map.get_map(0.01,x_size,y_size)
@@ -430,6 +448,8 @@ root.geometry("1920x1080")
 
 # exit button
 exit_button = Button(root, text = "continue", command = battle)
+
+continue_fight = Button(root, text = "continue", command = monster_attack)
 
 stats_box.place(in_=root, anchor="c", relx=1, rely=0.1)
 

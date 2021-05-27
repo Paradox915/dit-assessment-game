@@ -3,11 +3,11 @@
     {
         "symbol": "&",
     
-        "health": 100,
-        "stamina": 10,
+        "health": 50,
+        "stamina": 20,
     
-        "health_max": 100,
-        "stamina_max": 10,
+        "health_max": 50,
+        "stamina_max": 20,
     
         "inventory": 
         {
@@ -15,7 +15,7 @@
             {
                 "damage_min": 2,
                 "damage_max": 5,
-                "stamana_drain": 1,
+                "stamana_drain": 2,
                 "description": "a strong reliable punch sure to get you out of any situation"
             },
             "slap":
@@ -42,7 +42,6 @@
             "symbol": "G",
     
             "health": 10,
-            "stamina": 5,
     
             "inventory": 
             {
@@ -60,14 +59,13 @@
         {
             "symbol": "T",
     
-            "health": 50,
-            "stamina": 12,
+            "health": 20,
             "inventory": 
             {
                 "club":
                 {
                     "damage_min": 3,
-                    "damage_max": 20,
+                    "damage_max": 7,
                     "stamana_drain": 3,
                     "description": "a strong club that has a high chance to miss and do little damage"
                 }
@@ -78,13 +76,12 @@
             "symbol": "K",
     
             "health": 20,
-            "stamina": 12,
             "inventory": 
             {
                 "anime":
                 {
                     "damage_min": 1,
-                    "damage_max": 30,
+                    "damage_max": 20,
                     "stamana_drain": 2,
                     "description": "you feel a little bit of your soal leave your body as you are slowly converted into a weeb"
                 }
@@ -117,7 +114,7 @@
                 {
                     "damage_min": 1,
                     "damage_max": 5,
-                    "stamana_drain": 1,
+                    "stamana_drain": 2,
                     "description": "a strong reliable punch sure to get you out of any situation"
                 },
                 "anime":
