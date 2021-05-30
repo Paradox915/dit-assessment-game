@@ -223,6 +223,7 @@ you are now on %d stamana.'''%(move,data_main["player"]["inventory"][move]["desc
     for button in button_attacks:
             button.pack_forget()
     
+    # if the player wins the fight
     if enemys[index_enemy].is_alive() == False:
         print("dead")
         in_battle = False
@@ -231,9 +232,23 @@ you are now on %d stamana.'''%(move,data_main["player"]["inventory"][move]["desc
         store = "#"
         print("the enemy is: ", game_map[enemys[index_enemy].position[1]][enemys[index_enemy].position[0]])
         
+        # give the the player a random move from the enemy
+        move_to_give = random.choice(list(data_main["enemys"][enemys[index_enemy].enemy_type]["inventory"]))
+
+
+
         for button in button_attacks:
             button.pack_forget()
-        text = "you defeted the %s\nthis is a very good thing because the amount of oil has been depleted good job\n\nClick any button to continue."%enemys[index_enemy].enemy_type
+        
+        if move_to_give in list(data_main["player"]["inventory"]):
+            print("got move")
+            text = "you defeted the %s\nthis is a very good thing because the amount of oil has been depleted good job\n\nClick any button to continue."%enemys[index_enemy].enemy_type
+        else:
+            print("the dic", data_main["items"]["wepons"][move_to_give])
+            print("the moveing shit", move_to_give)
+            data_main["player"]["inventory"][move_to_give] = data_main["items"]["wepons"][move_to_give]
+            print(data_main["player"]["inventory"])
+            text = "you defeted the %s\nthis is a very good thing because the amount of oil has been depleted good job.\n\nyou have also gained a new move %s\n%s\n\nClick any button to continue."%(enemys[index_enemy].enemy_type, move_to_give, data_main["items"]["wepons"][move_to_give]["description"])
         game_text_box.insert(END,text) 
         game_text_box.config(state="disabled") 
         enemys.pop(index_enemy)
