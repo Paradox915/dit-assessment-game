@@ -66,6 +66,9 @@ y_size = 80 # 80
 
 store = ""
 
+# wether the level is complete or not
+level_complete = False
+
 index_enemy = None
 
 # the buttons
@@ -191,7 +194,7 @@ you are now on %d health.
 
 # the player attacking
 def attack_player(button):
-    global in_battle, button_attacks,game_map,store, index_enemy, continue_fight
+    global in_battle, button_attacks,game_map,store, index_enemy, continue_fight, level_complete
     
     
     game_text_box.config(state = "normal")    
@@ -249,12 +252,22 @@ you are now on %d stamana.'''%(move,data_main["player"]["inventory"][move]["desc
             data_main["player"]["inventory"][move_to_give] = data_main["items"]["wepons"][move_to_give]
             print(data_main["player"]["inventory"])
             text = "you defeted the %s\nthis is a very good thing because the amount of oil has been depleted good job.\n\nyou have also gained a new move %s\n%s\n\nClick any button to continue."%(enemys[index_enemy].enemy_type, move_to_give, data_main["items"]["wepons"][move_to_give]["description"])
+            
+        enemys.pop(index_enemy)
+        
+        # check to see if all enemys are dead
+        if len(enemys) == 0:
+            print("end level")
+            text += "\n\n\n\nYou have now completed the level.\nYou have cleaned up all of the oil in this level\nyou will now be moved onto a harder level."
+        
         game_text_box.insert(END,text) 
         game_text_box.config(state="disabled") 
-        enemys.pop(index_enemy)
-
+        
+        
         # set player health back up to max
         player.health =player.health_max
+        level_complete = True
+        
         return
     
     # let the player decide when to contine the fight
@@ -262,6 +275,7 @@ you are now on %d stamana.'''%(move,data_main["player"]["inventory"][move]["desc
 
     game_text_box.insert(END,text) 
     game_text_box.config(state="disabled")   
+    
 # fight a monster
 def battle():
     global in_battle, button_attacks, exit_button, index_enemy      
@@ -379,7 +393,14 @@ def update_map(char):
     @returns : none
     @throws : valueError
     '''
-    global store, game_map, player, enemys, in_battle
+    global store, game_map, player, enemys, in_battle, level_complete
+    
+    # check if the level is over and if so generate a new one
+    if level_complete:
+        level_complete = False
+        genarate_level(2)
+        update_map(" ")
+    
     # enable the text box to edit
     game_text_box.config(state = "normal")
     # clear the text box
@@ -454,7 +475,7 @@ enemy_types = list(data_main["enemys"].keys())
 for item in data_main["enemys"]:
     enemy_chars.append(data_main["enemys"][item]["symbol"])
 
-genarate_level(10)
+genarate_level(1)
 
 # set up the gui
 game_text_box.place(in_=root, anchor="c", relx=.5, rely=.5)

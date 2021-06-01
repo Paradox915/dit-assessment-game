@@ -83,7 +83,7 @@
                     "damage_min": 1,
                     "damage_max": 20,
                     "stamana_drain": 2,
-                    "description": "you feel a little bit of your soal leave your body as you are slowly converted into a weeb"
+                    "description": "you feel a little bit of your soul leave your body as you are slowly converted into a weeb"
                 }
             }
         }
@@ -122,7 +122,7 @@
                     "damage_min": 1,
                     "damage_max": 30,
                     "stamana_drain": 2,
-                    "description": "you feel a little bit of your soal leave your body as you are converted into a weeb"
+                    "description": "you feel a little bit of your soul leave your body as you are converted into a weeb"
                 },
                 "rest":
                 {
