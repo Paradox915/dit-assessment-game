@@ -27,9 +27,16 @@ import time
 
 # json
 import json
+
+# maths
+import math
+
 # varibles 
 game_map = []
 enemys = []
+
+# the current level
+level = 1
 
 totorial_text_path = "toutorial.txt"
 totorial_text = ""
@@ -66,8 +73,6 @@ y_size = 80 # 80
 
 store = ""
 
-# wether the level is complete or not
-level_complete = False
 
 index_enemy = None
 
@@ -159,6 +164,19 @@ class Player(Alive):
 
 # functions
 
+# get the number of enemys for a given level
+def get_dif(level):
+    '''
+    @param : int
+    @returns : int
+    @throws : valueError
+
+    the games difficalty it will incress as the game progresses based off the equation y = 2.5 * sqrt(x-1)+1
+    where x is the currnent level and y is the number of levels
+    '''
+    difficalty = 2.5*math.sqrt(level-1)+1
+
+    return int(difficalty)
 # the monster attacking the player
 def monster_attack():
     # the monster attacking the player
@@ -194,7 +212,7 @@ you are now on %d health.
 
 # the player attacking
 def attack_player(button):
-    global in_battle, button_attacks,game_map,store, index_enemy, continue_fight, level_complete
+    global in_battle, button_attacks,game_map,store, index_enemy, continue_fight
     
     
     game_text_box.config(state = "normal")    
@@ -266,7 +284,6 @@ you are now on %d stamana.'''%(move,data_main["player"]["inventory"][move]["desc
         
         # set player health back up to max
         player.health =player.health_max
-        level_complete = True
         
         return
     
@@ -379,7 +396,12 @@ def Key_pressed(event):
     @retruns : none
     @throws : none
     '''
+    global level
     # update the map only if the player is not dead
+    if len(enemys) == 0:
+        print("end")
+        level += 1
+        genarate_level(get_dif(level))
     if player.is_alive() and not in_battle:
         update_map(event.char)
 
@@ -393,13 +415,7 @@ def update_map(char):
     @returns : none
     @throws : valueError
     '''
-    global store, game_map, player, enemys, in_battle, level_complete
-    
-    # check if the level is over and if so generate a new one
-    if level_complete:
-        level_complete = False
-        genarate_level(2)
-        update_map(" ")
+    global store, game_map, player, enemys, in_battle
     
     # enable the text box to edit
     game_text_box.config(state = "normal")
@@ -444,7 +460,7 @@ def update_map(char):
     game_text_box.tag_add("player", "%d.%d"%(player.position[1]+1,player.position[0]))
     game_text_box.tag_config("player", foreground="black")
 
-    # make the enimys a diffrent colour
+      # make the enimys a diffrent colour
     for enemy in enemys:
         game_text_box.tag_add("enemy", "%d.%d"%(enemy.position[1]+1,enemy.position[0]))
         game_text_box.tag_config("enemy", foreground="dark red")
@@ -475,7 +491,7 @@ enemy_types = list(data_main["enemys"].keys())
 for item in data_main["enemys"]:
     enemy_chars.append(data_main["enemys"][item]["symbol"])
 
-genarate_level(1)
+genarate_level(get_dif(level))
 
 # set up the gui
 game_text_box.place(in_=root, anchor="c", relx=.5, rely=.5)
