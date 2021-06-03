@@ -23,6 +23,7 @@ def get_map(_max = 0.001, map_x = 10, map_y = 10):
 
     _map = []
     land_pos = []
+    obsticals = []
     # main routine
     for x in range(map_x):
         row = []
@@ -42,7 +43,8 @@ def get_map(_max = 0.001, map_x = 10, map_y = 10):
                 land_pos.append((y,x))
             else:
                 _map[x][y] = " "
-    return _map, land_pos
+                obsticals.append((y,x))
+    return _map, land_pos, obsticals
 
 if __name__ == "__main__":
     for row in get_map():

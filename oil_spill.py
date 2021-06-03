@@ -11,7 +11,7 @@ and clean up as much oil in the form of killing monsters and other means
 import genarate_map
 
 # the pathfinding for the enimys
-import a_star
+from a_star import a_star, distance_between_points
 
 # handle user input
 import user_input
@@ -35,8 +35,13 @@ import math
 game_map = []
 enemys = []
 
+obsticals = []
+
 # the current level
-level = 1
+level = 2
+
+# the max distance when the enemys will start pathfinding
+max_distance = 30
 
 totorial_text_path = "toutorial.txt"
 totorial_text = ""
@@ -114,14 +119,6 @@ class Alive:
         else:
             return True
     
-    # return the stats
-    def get_stats(self):
-        '''
-        @param : 
-        @returns :
-        @throws :
-        '''
-        pass
 
     # move the object
     def move(self,direction, x_max, y_max):
@@ -144,13 +141,13 @@ class Enemy(Alive):
         self.enemy_type = enemy_type
         #self.health = health
     # return the path for the enemy
-    def get_path(self):
+    def get_path(self, end):
         '''
-        @param : (int, int), (int, int) 
+        @param : (int, int) 
         @returns : list
         @throws : no possible path
         '''        
-        pass
+        return a_star(y_size,x_size,obsticals,self.position,end)
 
 class Player(Alive):
     '''
@@ -366,9 +363,9 @@ def genarate_level(difficalty):
     @returns : none
     @throws : valueError
     '''
-    global game_map, enemys, store, enemy_types, data_main
+    global game_map, enemys, store, enemy_types, data_main, obsticals
     # create the map and the land places
-    game_map, land_pos = genarate_map.get_map(0.01,x_size,y_size)
+    game_map, land_pos, obsticals = genarate_map.get_map(0.01,x_size,y_size)
 
     #set the player position
     player.position = random.choice(land_pos)
@@ -415,8 +412,19 @@ def update_map(char):
     @returns : none
     @throws : valueError
     '''
-    global store, game_map, player, enemys, in_battle
-    
+    global store, game_map, player, enemys, in_battle, obsticals, max_distance
+    # move the enemys
+    print(enemys)
+    for enemy in enemys:
+        # check the distance to the enemys  
+        if distance_between_points(enemy.position, player.position) < max_distance:
+            path = enemy.get_path(player.position)
+            print(path)
+            if path != "no possible path" and len(path) > 2:
+                game_map[enemy.position[1]][enemy.position[0]] = "#"
+                enemy.position = path[-2]
+                game_map[enemy.position[1]][enemy.position[0]] = enemy.symbol
+
     # enable the text box to edit
     game_text_box.config(state = "normal")
     # clear the text box
@@ -484,7 +492,7 @@ def update_map(char):
 player = Player((0,0),data_main["player"]["symbol"],data_main["player"]["health_max"],data_main["player"]["health"],data_main["player"]["stamina"],data_main["player"]["stamina_max"])
 
 # create the map and the land places
-game_map, land_pos = genarate_map.get_map(0.01,x_size,y_size)
+game_map, land_pos, obsticals = genarate_map.get_map(0.01,x_size,y_size)
 
 # get the enemys symbles
 enemy_types = list(data_main["enemys"].keys())
