@@ -37,7 +37,7 @@
     
     "enemys":
     {
-        "goblin":
+        "Goblin":
         {
             "symbol": "G",
     
@@ -55,7 +55,7 @@
             }
         },
     
-        "troll":
+        "Troll":
         {
             "symbol": "T",
     
@@ -68,27 +68,101 @@
                     "damage_max": 7,
                     "stamana_drain": 3,
                     "description": "a strong club that has a high chance to miss and do little damage"
+                },
+                "slap":
+                {
+                    "damage_min": 1,
+                    "damage_max": 1,
+                    "stamana_drain": 1,
+                    "description": "a weak slap sure to leave a mark that will fade in seconds"
                 }
             }
         },
-        "kerren":
+
+        "Dragon":
         {
-            "symbol": "K",
+            "symbol": "D",
     
-            "health": 20,
+            "health": 35,
             "inventory": 
             {
-                "anime":
+                "fire breath":
+                {
+                    "damage_min": 9,
+                    "damage_max": 10,
+                    "stamana_drain": 5,
+                    "description": "breathing fire is really not advisabe but hey it does a lot of damage."
+                },
+                "scratch":
+                {
+                    "damage_min": 2,
+                    "damage_max": 5,
+                    "stamana_drain": 3,
+                    "description": "that scratch is sure to get infected."
+                }
+            }
+        },
+        
+        "Undead":
+        {
+            "symbol": "U",
+    
+            "health": 10,
+            "inventory": 
+            {
+                "scratch":
+                {
+                    "damage_min": 2,
+                    "damage_max": 5,
+                    "stamana_drain": 3,
+                    "description": "that scratch is sure to get infected."
+                }
+            }
+        },
+
+        "necromancer":
+        {
+            "symbol": "N",
+    
+            "health": 40,
+            "inventory": 
+            {
+                "summon":
+                {
+                    "damage_min": 6,
+                    "damage_max": 30,
+                    "stamana_drain": 10,
+                    "description": "why are they all children?."
+                }
+            }
+        },
+        "orc":
+        {
+            "symbol": "O",
+    
+            "health": 15,
+            "inventory": 
+            {
+                "club":
+                {
+                    "damage_min": 3,
+                    "damage_max": 20,
+                    "stamana_drain": 3,
+                    "description": "a strong club that has a high chance to miss and do little damage"
+                },
+                "punch":
                 {
                     "damage_min": 1,
-                    "damage_max": 20,
+                    "damage_max": 5,
                     "stamana_drain": 2,
-                    "description": "you feel a little bit of your soul leave your body as you are slowly converted into a weeb"
+                    "description": "a strong reliable punch sure to get you out of any situation"
                 }
             }
         }
         
     },
+
+    
     
     "items":
     {
@@ -117,19 +191,26 @@
                     "stamana_drain": 2,
                     "description": "a strong reliable punch sure to get you out of any situation"
                 },
-                "anime":
-                {
-                    "damage_min": 1,
-                    "damage_max": 30,
-                    "stamana_drain": 2,
-                    "description": "you feel a little bit of your soul leave your body as you are converted into a weeb"
-                },
                 "rest":
                 {
                     "damage_min": 0,
                     "damage_max": 0,
                     "stamana_drain": -2,
                     "description": "you feel a rested and a bit of your stamana is returned"
+                },
+                "fire breath":
+                {
+                    "damage_min": 9,
+                    "damage_max": 10,
+                    "stamana_drain": 5,
+                    "description": "breathing fire is really not advisabe but hey it does a lot of damage."
+                },
+                "scratch":
+                {
+                    "damage_min": 2,
+                    "damage_max": 5,
+                    "stamana_drain": 3,
+                    "description": "that scratch is sure to get infected."
                 }
         }
     }

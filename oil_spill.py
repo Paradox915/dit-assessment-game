@@ -210,7 +210,10 @@ you are now on %d health.
 # the player attacking
 def attack_player(button):
     global in_battle, button_attacks,game_map,store, index_enemy, continue_fight
-    
+    if not player.is_alive():
+        print("get this shit outa here")
+        for button in button_attacks:
+            button.pack_forget()
     
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
@@ -345,6 +348,7 @@ def totorial(text = "totorial"):
 # end the game after the player has died
 def player_death():
     player.health = 0
+
     # enable the text box to edit
     game_text_box.config(state = "normal")
     # clear the text box
@@ -399,8 +403,10 @@ def Key_pressed(event):
         print("end")
         level += 1
         genarate_level(get_dif(level))
+    print(player.is_alive())
     if player.is_alive() and not in_battle:
-        update_map(event.char)
+        print(player.is_alive())
+        update_map(event.char.lower())
 
 
 
