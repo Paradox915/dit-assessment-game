@@ -211,6 +211,13 @@
                     "damage_max": 5,
                     "stamana_drain": 3,
                     "description": "that scratch is sure to get infected."
+                },
+                "summon":
+                {
+                    "damage_min": 6,
+                    "damage_max": 30,
+                    "stamana_drain": 10,
+                    "description": "why are they all children?."
                 }
         }
     }
