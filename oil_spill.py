@@ -408,7 +408,7 @@ def genarate_level(difficalty):
     @returns : none
     @throws : valueError
     '''
-    global game_map, enemys, store, enemy_types, data_main, obsticals
+    global game_map, enemys, store, enemy_types, data_main, obsticals, level
     # create the map and the land places
     game_map, land_pos, obsticals = genarate_map.get_map(0.01,X_SIZE,Y_SIZE)
 
@@ -423,9 +423,16 @@ def genarate_level(difficalty):
 
     # generate the enemys and place them on to the map
     enemys = []
+    # the possible enemys
+    if level >= len(enemy_types):
+        enemy_types_curated = enemy_types
+    else:
+        enemy_types_curated = enemy_types[:level]
+    print(enemy_types)
+    print(enemy_types_curated)
     for i in range(int(difficalty)):
         # choose a random enemy and add them into the map
-        enemy_current_type = random.choice(enemy_types)
+        enemy_current_type = random.choice(enemy_types_curated)
         enemy_current = data_main["enemys"][enemy_current_type]
         enemys.append(Enemy(random.choice(land_pos),enemy_current["symbol"],enemy_current["health"],enemy_current["health"],enemy_current_type))
         game_map[enemys[i].position[1]][enemys[i].position[0]] = enemys[i].symbol
