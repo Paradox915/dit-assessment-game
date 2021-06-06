@@ -32,20 +32,24 @@ import json
 import math
 
 # varibles 
+# the map for the game
 game_map = []
+# the enemys in the level
 enemys = []
-
+# positions os obsticals
 obsticals = []
 
 # the current level
-level = 2
+level = 1
 
 # the max distance when the enemys will start pathfinding
 max_distance = 30
 
+# path for the toutorial relitive to current file
 totorial_text_path = "toutorial.txt"
 totorial_text = ""
 
+# path for the death relitive to current file
 death_text_path = "death.txt"
 death_text = ""
 
@@ -56,6 +60,7 @@ in_battle = False
 # list of chartures that the enemys use
 enemy_chars = []
 
+# get the data for player and enemys
 data_main_path = "data_main.json"
 # open and get the totorial text
 with open (totorial_text_path, "r") as file:
@@ -71,14 +76,14 @@ with open (death_text_path, "r") as file:
 with open(data_main_path) as file:
     data_main = json.load(file)
 
-#print(data_main["player"]["inventory"])
 # the x and y size of the map
-x_size = 24 # 24
-y_size = 80 # 80
+X_SIZE = 24
+Y_SIZE = 80
 
+# a storage value for the players last positon
 store = ""
 
-
+# index of the current enemy being fought
 index_enemy = None
 
 # the buttons
@@ -99,7 +104,7 @@ stats_box = Text(root, font = ('Courier', 20, 'bold'), bg = "light blue", fg = "
 # classes
 class Alive:
     '''
-    the class of the player and enimys
+    the class of the player and enemys
     '''
     def __init__(self, position, symbol, health_max, health):
         self.position = position
@@ -134,24 +139,25 @@ class Alive:
 
 class Enemy(Alive):
     '''
-    enimys
+    sub class for all of the enemys
     '''
     def __init__(self, position, symbol, health,health_max, enemy_type):
         super().__init__(position, symbol, health, health_max)
         self.enemy_type = enemy_type
-        #self.health = health
+
     # return the path for the enemy
     def get_path(self, end):
         '''
         @param : (int, int) 
         @returns : list
         @throws : no possible path
-        '''        
-        return a_star(y_size,x_size,obsticals,self.position,end)
+        '''    
+        # get the fastest path from the start to the end while avoiding the obsicals    
+        return a_star(Y_SIZE,X_SIZE,obsticals,self.position,end)
 
 class Player(Alive):
     '''
-    the player class
+    the player sub class
     '''
     def __init__(self, position, symbol, health_max, health, stamina , max_stamina ):
         super().__init__(position, symbol, health_max, health)
@@ -171,14 +177,16 @@ def get_dif(level):
     the games difficalty it will incress as the game progresses based off the equation y = 2.5 * sqrt(x-1)+1
     where x is the currnent level and y is the number of levels
     '''
+    # get the difficalty based off a square root function
     difficalty = 2.5*math.sqrt(level-1)+1
 
     return int(difficalty)
+
+
 # the monster attacking the player
 def monster_attack():
     # the monster attacking the player
     global data_main, button_attacks, exit_button, index_enemy, continue_fight
-
     continue_fight.pack_forget()
 
     # get monster data
@@ -187,13 +195,17 @@ def monster_attack():
     # get the move
     move = random.choice(list(monster_data))
 
+    # get the ammount of damage that the player will receve
     damage = random.randint(monster_data[move]["damage_min"],monster_data[move]["damage_max"])
 
+    # damage the player
     player.health -= damage
     
+    # remove the fight buttons
     for button in button_attacks:
         button.pack_forget()
-        
+
+    # update the gui to display corect infomation   
     exit_button.pack()
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
@@ -210,32 +222,42 @@ you are now on %d health.
 # the player attacking
 def attack_player(button):
     global in_battle, button_attacks,game_map,store, index_enemy, continue_fight
+
+    # check if the player is dead
     if not player.is_alive():
-        print("get this shit outa here")
         for button in button_attacks:
             button.pack_forget()
+            return
     
+    # update the gui
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
-    #print("the move: ", move)
     
+    # get the move that the player is useing
     move = button.config('text')[-1]
     
+    # get the damage that the move does too the enemy
     damage = random.randint(int(data_main["player"]["inventory"][move]["damage_min"]),int(data_main["player"]["inventory"][move]["damage_max"]))
     print("enemy hp",enemys[index_enemy].health)
+
+    # decress the enemys haelth by the ammount of damage that the player does
     enemys[index_enemy].health -= damage
     print("enemy hp",enemys[index_enemy].health)
 
-    # do stuff with the stamana
+    # decress the players stamana by the amount that the move used
     player.stamina -= data_main["player"]["inventory"][move]["stamana_drain"]
 
+    # making sure that the players stamina does not exceed the max stanana
     if player.stamina > player.max_stamina:
         player.stamina = player.max_stamina
     elif player.stamina <= 0:
+        # remove the attack buttons
         for button in button_attacks:
             button.pack_forget()
+        # call the players death if stamana is less than 0
         player_death()
 
+    # update the gui
     text = '''You used %s.\n
 %s\n
 %s does %d damage to the %s and used %d stamina.\n
@@ -257,20 +279,18 @@ you are now on %d stamana.'''%(move,data_main["player"]["inventory"][move]["desc
         move_to_give = random.choice(list(data_main["enemys"][enemys[index_enemy].enemy_type]["inventory"]))
 
 
-
+        # remove the battle buttons
         for button in button_attacks:
             button.pack_forget()
         
+        # give the player a move if thay dont have it allready
         if move_to_give in list(data_main["player"]["inventory"]):
             print("got move")
             text = "you defeted the %s\nthis is a very good thing because the amount of oil has been depleted good job\n\nClick any button to continue."%enemys[index_enemy].enemy_type
         else:
-            print("the dic", data_main["items"]["wepons"][move_to_give])
-            print("the moveing shit", move_to_give)
             data_main["player"]["inventory"][move_to_give] = data_main["items"]["wepons"][move_to_give]
-            print(data_main["player"]["inventory"])
             text = "you defeted the %s\nthis is a very good thing because the amount of oil has been depleted good job.\n\nyou have also gained a new move %s\n%s\n\nClick any button to continue."%(enemys[index_enemy].enemy_type, move_to_give, data_main["items"]["wepons"][move_to_give]["description"])
-            
+        # remove the enemy from the list    
         enemys.pop(index_enemy)
         
         # check to see if all enemys are dead
@@ -278,31 +298,38 @@ you are now on %d stamana.'''%(move,data_main["player"]["inventory"][move]["desc
             print("end level")
             text += "\n\n\n\nYou have now completed the level.\nYou have cleaned up all of the oil in this level\nyou will now be moved onto a harder level."
         
+        # disable the text box
         game_text_box.insert(END,text) 
         game_text_box.config(state="disabled") 
         
         
         # set player health back up to max
-        player.health =player.health_max
+        if player.is_alive():
+            player.health =player.health_max
         
         return
     
     # let the player decide when to contine the fight
     continue_fight.pack()
 
+    # disable the text box
     game_text_box.insert(END,text) 
     game_text_box.config(state="disabled")   
-    
+
+    # show the player thir stats
+    display_stats()
+
 # fight a monster
 def battle():
     global in_battle, button_attacks, exit_button, index_enemy      
-    # get which enemy that the player is figthing
     
+    # remove the exit button if it is on screen at the current point
     if exit_button.winfo_viewable():
         exit_button.pack_forget()
     game_text_box.config(state = "normal")    
     game_text_box.delete("1.0",END)
     
+    # check if the player is dead
     if not player.is_alive():
         player_death()
 
@@ -313,6 +340,7 @@ def battle():
             index_enemy = i
             break
 
+    # update the gui
     text = '''You are in a fight.\nYou need to kill the %s to clean up the oil!\nThe %s has got %d health.\n
 click on the buttons below to use a move.
     '''%(enemys[index_enemy].enemy_type,enemys[index_enemy].enemy_type,enemys[index_enemy].health)
@@ -320,7 +348,10 @@ click on the buttons below to use a move.
     game_text_box.insert(END,text)
     # disable editing of the text box
     game_text_box.config(state = "disabled")
-    game_text_box.pack()    
+    game_text_box.pack()
+
+    # display the players updated stats
+    display_stats() 
     
     # display the players possible moves
     
@@ -331,7 +362,6 @@ click on the buttons below to use a move.
         button_attacks[-1]["command"] = lambda move_in = button_attacks[-1]: attack_player(move_in)
     for button in button_attacks:
         button.pack()
-        #print("move name is",button.config('text')[-1])
   
 # totorial
 def totorial(text = "totorial"):
@@ -348,7 +378,7 @@ def totorial(text = "totorial"):
 # end the game after the player has died
 def player_death():
     player.health = 0
-
+    display_stats()
     # enable the text box to edit
     game_text_box.config(state = "normal")
     # clear the text box
@@ -359,6 +389,17 @@ def player_death():
     game_text_box.config(state = "disabled")
     game_text_box.pack()
     
+# display the stats for the level and player
+def display_stats():
+    # display stats
+    stats_box.config(state = "normal")
+
+    # clear the text box
+    stats_box.delete("1.0",END)    
+    
+    stats_box.insert(INSERT,"health : %d\nstamina : %d\nlevel : %d\nenemys : %d"%(player.health,player.stamina, level, len(enemys)))
+    
+    stats_box.config(state = "disabled")
 
 # genarate a level
 def genarate_level(difficalty):
@@ -369,7 +410,7 @@ def genarate_level(difficalty):
     '''
     global game_map, enemys, store, enemy_types, data_main, obsticals
     # create the map and the land places
-    game_map, land_pos, obsticals = genarate_map.get_map(0.01,x_size,y_size)
+    game_map, land_pos, obsticals = genarate_map.get_map(0.01,X_SIZE,Y_SIZE)
 
     #set the player position
     player.position = random.choice(land_pos)
@@ -383,27 +424,25 @@ def genarate_level(difficalty):
     # generate the enemys and place them on to the map
     enemys = []
     for i in range(int(difficalty)):
+        # choose a random enemy and add them into the map
         enemy_current_type = random.choice(enemy_types)
         enemy_current = data_main["enemys"][enemy_current_type]
-        #print(enemy_current)
         enemys.append(Enemy(random.choice(land_pos),enemy_current["symbol"],enemy_current["health"],enemy_current["health"],enemy_current_type))
         game_map[enemys[i].position[1]][enemys[i].position[0]] = enemys[i].symbol
     
 
 # pick up keybord input
 def Key_pressed(event):
-    '''
-    @parm : none
-    @retruns : none
-    @throws : none
-    '''
     global level
-    # update the map only if the player is not dead
+    
+    # check to seei fif the level has been betten 
     if len(enemys) == 0:
         print("end")
         level += 1
         genarate_level(get_dif(level))
     print(player.is_alive())
+
+    # update the map only if the player is not dead
     if player.is_alive() and not in_battle:
         print(player.is_alive())
         update_map(event.char.lower())
@@ -418,14 +457,22 @@ def update_map(char):
     @returns : none
     @throws : valueError
     '''
-    global store, game_map, player, enemys, in_battle, obsticals, max_distance
-    # move the enemys
+    global store, game_map, player, enemys, in_battle, obsticals, max_distance, button_attacks
+
+    # check to see if the player is alive
+    if not player.is_alive():
+        for button in button_attacks:
+            button.pack_forget()
+        return
+
+    # move the enemys by generating a path
     print(enemys)
     for enemy in enemys:
         # check the distance to the enemys  
-        if distance_between_points(enemy.position, player.position) < max_distance:
+        if distance_between_points(enemy.position, player.position) < max_distance and store != " ":
             path = enemy.get_path(player.position)
             print(path)
+            # check if the there is a possible
             if path != "no possible path" and len(path) > 2:
                 game_map[enemy.position[1]][enemy.position[0]] = "#"
                 enemy.position = path[-2]
@@ -439,7 +486,7 @@ def update_map(char):
     # set the current players position to the stored char that was there
     game_map[player.position[1]][player.position[0]] = store
     # move the player
-    player.move(user_input.movement_input(char),x_size,y_size)
+    player.move(user_input.movement_input(char),X_SIZE,Y_SIZE)
     # get a new store value
     store = game_map[player.position[1]][player.position[0]]
     # place the player on the map
@@ -482,15 +529,7 @@ def update_map(char):
     game_text_box.config(state = "disabled")
     game_text_box.pack()
     
-    # display stats
-    stats_box.config(state = "normal")
-
-    # clear the text box
-    stats_box.delete("1.0",END)    
-    
-    stats_box.insert(INSERT,"health : %d\nstamina : %d"%(player.health,player.stamina))
-    
-    stats_box.config(state = "disabled")    
+    display_stats()    
 
 # main routine
 
@@ -498,7 +537,7 @@ def update_map(char):
 player = Player((0,0),data_main["player"]["symbol"],data_main["player"]["health_max"],data_main["player"]["health"],data_main["player"]["stamina"],data_main["player"]["stamina_max"])
 
 # create the map and the land places
-game_map, land_pos, obsticals = genarate_map.get_map(0.01,x_size,y_size)
+game_map, land_pos, obsticals = genarate_map.get_map(0.01,X_SIZE,Y_SIZE)
 
 # get the enemys symbles
 enemy_types = list(data_main["enemys"].keys())
@@ -531,6 +570,7 @@ root.bind("<KeyRelease>",Key_pressed)
 # show the map
 update_map(" ")
 
+# show the totorial
 totorial(totorial_text)
 
 # start the main routine
