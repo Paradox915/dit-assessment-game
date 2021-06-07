@@ -4,7 +4,7 @@
 the main file for the game
 
 the game shall be about an oil spill and you have to go around
-and clean up as much oil in the form of killing monsters and other means
+and clean up as much oil in the form of killing monsters
 '''
 # imports
 # the map genaration
